@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Responsividade (CSS)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Estilos extras só para as demos (mantém cores/variáveis do styles.css) */
+    .demo {
+      background: #fff;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    .notice {
+      background: rgba(124, 58, 237, 0.06);
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.95em;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    /* Demo: grid responsivo */
+    .r-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .r-item {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .r-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .r-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Demo: tipografia fluida */
+    .fluid-title {
+      font-size: clamp(1.25rem, 2.5vw + 0.75rem, 2rem);
+      margin: 0 0 6px;
+    }
+    .fluid-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 0.8vw + 0.75rem, 1.1rem);
+    }
+
+    /* Demo: imagem responsiva sem depender de arquivo externo */
+    .fake-img {
+      height: 160px;
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(124,58,237,0.22), rgba(34,197,94,0.18)),
+        repeating-linear-gradient(45deg, rgba(15,23,42,0.06), rgba(15,23,42,0.06) 10px, rgba(255,255,255,0.0) 10px, rgba(255,255,255,0.0) 20px);
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    /* Demo: navegação que quebra de linha */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      display: inline-block;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    /* Demo: formulário que adapta */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: end;
+    }
+    .field {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+    .field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18); }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      width: 100%;
+    }
+    .btn:hover { border-color: var(--primary); background: rgba(124, 58, 237, 0.06); }
+    .btn:active { transform: translateY(1px); }
+
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Orientação: portrait vs landscape */
+    .orientation-demo {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .state {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      min-width: 220px;
+      flex: 1;
+    }
+    .state strong { display: block; margin-bottom: 4px; }
+    .state small { color: var(--muted); display: block; }
+    .state .tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      width: fit-content;
+    }
+    @media (orientation: portrait) {
+      .state--portrait { border-color: rgba(34, 197, 94, 0.45); background: rgba(34, 197, 94, 0.06); }
+      .state--portrait .tag { color: #166534; border-color: rgba(34, 197, 94, 0.45); }
+    }
+    @media (orientation: landscape) {
+      .state--landscape { border-color: rgba(124, 58, 237, 0.45); background: rgba(124, 58, 237, 0.06); }
+      .state--landscape .tag { color: #4c1d95; border-color: rgba(124, 58, 237, 0.45); }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Responsividade no CSS</h1>
+    <p>Como fazer sua página se adaptar bem a celular, tablet e desktop.</p>
+  </header>
+
+  <nav class="toc">
+    <h2>Conteúdo</h2>
+    <ul>
+      <li><a href="#o-que-e">O que é</a></li>
+      <li><a href="#viewport">Viewport</a></li>
+      <li><a href="#unidades">Unidades e tamanhos fluidos</a></li>
+      <li><a href="#media">Media queries</a></li>
+      <li><a href="#orientacao">Portrait e Landscape</a></li>
+      <li><a href="#layout">Flex e Grid</a></li>
+      <li><a href="#imagens">Imagens responsivas</a></li>
+      <li><a href="#boas-praticas">Boas práticas</a></li>
+      <li><a href="#resumo">Resumo</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="o-que-e" class="card">
+      <h2>O que é responsividade?</h2>
+      <p>
+        Uma página <strong>responsiva</strong> é aquela que <strong>se ajusta automaticamente</strong> a diferentes tamanhos de tela
+        (celular, tablet, notebook, monitor), sem quebrar layout, sem “estourar” conteúdo e mantendo boa leitura.
+      </p>
+      <div class="notice">
+        <strong>Dica:</strong> no navegador, aperte <span class="kbd">F12</span> e ative o modo responsivo (Device Toolbar) para testar.
+      </div>
+    </section>
+
+    <section id="viewport" class="card">
+      <h2>Viewport (meta tag)</h2>
+      <p>
+        Para o site funcionar bem no celular, é essencial ter a meta tag do viewport. Sem ela, o navegador pode “simular”
+        uma largura maior e o layout fica minúsculo.
+      </p>
+      <pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</code></pre>
+      <p style="margin:0; color: var(--muted);">Essa página já está com a tag configurada.</p>
+    </section>
+
+    <section id="unidades" class="card">
+      <h2>Unidades e tamanhos fluidos</h2>
+      <p>
+        Para responsividade, prefira medidas que <strong>se adaptam</strong>:
+      </p>
+      <ul>
+        <li><code>%</code> — bom para larguras relativas (ex.: <code>width: 100%</code>).</li>
+        <li><code>rem</code> — bom para tamanhos de texto e espaçamentos consistentes.</li>
+        <li><code>vw</code>/<code>vh</code> — relativas ao tamanho da tela (use com cuidado).</li>
+        <li><code>clamp()</code> — cria valores fluidos com mínimo e máximo (ótimo para tipografia).</li>
+      </ul>
+
+      <div class="demo">
+        <h3 class="fluid-title">Título com tipografia fluida (clamp)</h3>
+        <p class="fluid-text">Redimensione a janela e veja o texto ajustar sem “pular” de tamanho.</p>
+      </div>
+
+      <pre><code>/* Tipografia fluida */
+h1 {
+  font-size: clamp(1.25rem, 2.5vw + 0.75rem, 2rem);
+}
+      </code></pre>
+    </section>
+
+    <section id="media" class="card">
+      <h2>Media queries</h2>
+      <p>
+        <strong>Media queries</strong> aplicam estilos quando uma condição é verdadeira (normalmente, largura da tela).
+        O mais comum é usar <code>max-width</code> (para telas menores) ou <code>min-width</code> (para telas maiores).
+      </p>
+      <pre><code>/* Mobile-first (recomendado): base para celular */
+.card { padding: 16px; }
+
+/* A partir de 900px (tablet/desktop), ajusta layout */
+@media (min-width: 900px) {
+  .card { padding: 20px; }
+}
+      </code></pre>
+
+      <div class="demo">
+        <p style="margin:0 0 8px; color: var(--muted);">Exemplo: grid que vira 2 colunas e depois 1 coluna.</p>
+        <div class="r-grid">
+          <div class="r-item">Coluna 1</div>
+          <div class="r-item">Coluna 2</div>
+          <div class="r-item">Coluna 3</div>
+          <div class="r-item">Coluna 4</div>
+          <div class="r-item">Coluna 5</div>
+          <div class="r-item">Coluna 6</div>
+        </div>
+      </div>
+
+      <pre><code>.r-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .r-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .r-grid { grid-template-columns: 1fr; } }
+      </code></pre>
+    </section>
+
+    <section id="orientacao" class="card">
+      <h2>Mobile: Portrait vs Landscape</h2>
+      <p>
+        No celular, o usuário pode usar o aparelho em <strong>portrait</strong> (em pé) ou <strong>landscape</strong> (deitado).
+        Mesmo com a mesma largura, a <strong>altura disponível</strong> muda bastante, e isso pode afetar menus, seções “hero”,
+        formulários e elementos com altura fixa.
+      </p>
+
+      <div class="demo">
+        <p style="margin:0 0 8px; color: var(--muted);">Vire o celular (ou use o emulador) para ver qual cartão fica destacado.</p>
+        <div class="orientation-demo">
+          <div class="state state--portrait">
+            <strong>Portrait (em pé)</strong>
+            <small>Normalmente: mais altura e menos largura.</small>
+            <span class="tag">orientation: portrait</span>
+          </div>
+          <div class="state state--landscape">
+            <strong>Landscape (deitado)</strong>
+            <small>Normalmente: mais largura e menos altura.</small>
+            <span class="tag">orientation: landscape</span>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Você pode aplicar estilos por orientação, mas use isso com moderação. Na prática, costuma ser melhor
+        <strong>combinar orientação + altura</strong> para tratar o “landscape apertado” do mobile.
+      </p>
+      <pre><code>/* Só pela orientação */
+@media (orientation: landscape) {
+  /* Ex.: reduzir espaçamentos ou esconder elementos secundários */
+}
+
+/* Mobile em landscape costuma ter pouca altura */
+@media (max-height: 420px) and (orientation: landscape) {
+  .hero { min-height: auto; padding: 16px; }
+}
+      </code></pre>
+
+      <div class="notice">
+        <strong>Dica importante:</strong> evite usar <code>height: 100vh</code> “cego” em mobile.
+        Em alguns navegadores, barras do sistema mudam o valor de <code>vh</code>. Quando possível, prefira <code>min-height</code>
+        ou use unidades modernas como <code>dvh</code> (ex.: <code>min-height: 100dvh</code>).
+      </div>
+    </section>
+
+    <section id="layout" class="card">
+      <h2>Flex e Grid (responsividade na prática)</h2>
+      <p>
+        A maior parte da responsividade vem de escolher bem o layout:
+        <strong>Flex</strong> para alinhamentos e distribuição em um eixo; <strong>Grid</strong> para linhas/colunas.
+      </p>
+
+      <h3 style="margin-bottom: 8px;">Flex com quebra de linha</h3>
+      <div class="demo">
+        <div class="pills">
+          <span class="pill">Home</span>
+          <span class="pill">Cursos</span>
+          <span class="pill">Projetos</span>
+          <span class="pill">Contato</span>
+          <span class="pill">FAQ</span>
+          <span class="pill">Entrar</span>
+        </div>
+      </div>
+      <pre><code>.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+      </code></pre>
+
+      <h3 style="margin-bottom: 8px;">Formulário que vira 1 coluna no celular</h3>
+      <div class="demo">
+        <div class="form-grid">
+          <div>
+            <label for="nome" style="display:block; margin-bottom:6px; color: var(--muted);">Nome</label>
+            <input id="nome" class="field" type="text" placeholder="Seu nome" />
+          </div>
+          <div>
+            <label for="email" style="display:block; margin-bottom:6px; color: var(--muted);">Email</label>
+            <input id="email" class="field" type="email" placeholder="seu@email.com" />
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <button class="btn" type="button">Enviar</button>
+          </div>
+        </div>
+      </div>
+      <pre><code>.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+      </code></pre>
+    </section>
+
+    <section id="imagens" class="card">
+      <h2>Imagens responsivas</h2>
+      <p>
+        Regra básica: para a imagem nunca estourar o container, use:
+        <code>max-width: 100%</code> e <code>height: auto</code>.
+      </p>
+      <pre><code>img { max-width: 100%; height: auto; display: block; }</code></pre>
+
+      <div class="demo">
+        <div class="fake-img">Exemplo de “imagem” fluida</div>
+        <p style="margin:10px 0 0; color: var(--muted);">
+          Ela ocupa <code>width: 100%</code>, então acompanha o tamanho do card.
+        </p>
+      </div>
+
+      <p>
+        Quando quiser servir imagens diferentes por tamanho de tela, você pode usar <code>&lt;picture&gt;</code>:
+      </p>
+      <pre><code>&lt;picture&gt;
+  &lt;source media="(max-width: 600px)" srcset="img/banner-mobile.jpg" /&gt;
+  &lt;img src="img/banner-desktop.jpg" alt="Banner" /&gt;
+&lt;/picture&gt;
+      </code></pre>
+    </section>
+
+    <section id="boas-praticas" class="card">
+      <h2>Boas práticas</h2>
+      <ul>
+        <li><strong>Mobile-first</strong>: escreva a base pensando no celular e vá melhorando para telas maiores.</li>
+        <li><strong>Evite larguras fixas</strong> como <code>width: 1200px</code>. Prefira <code>max-width</code> + <code>width: 100%</code>.</li>
+        <li><strong>Use grid/flex</strong> em vez de “empurrar” com margin/padding.</li>
+        <li><strong>Teste com zoom</strong> e com teclado (acessibilidade também importa na responsividade).</li>
+      </ul>
+      <pre><code>/* Exemplo comum de container */
+.container {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+      </code></pre>
+    </section>
+
+    <section id="resumo" class="card">
+      <h2>Resumo</h2>
+      <ul>
+        <li><strong>Viewport</strong> garante escala correta no celular.</li>
+        <li><strong>Unidades fluidas</strong> e <code>clamp()</code> deixam o layout mais flexível.</li>
+        <li><strong>Media queries</strong> ajustam o layout em pontos-chave.</li>
+        <li><strong>Flex/Grid</strong> resolvem 90% dos layouts responsivos.</li>
+      </ul>
+      <p style="margin:0; color: var(--muted);">Próximo passo: aplicar esses padrões no seu projeto e testar em 360px, 768px e 1024px.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>DevClub · CSS Básico · Responsividade</small>
+  </footer>
+</body>
+</html>

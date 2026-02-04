@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Listas no HTML (Ordenadas e Desordenadas)</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+
+    <body>
+        <main>
+        <h1>Listas no HTML</h1>
+        <p>
+            Em HTML existem dois tipos principais de listas:
+            <strong>desordenadas</strong> (<code>&lt;ul&gt;</code>) e
+            <strong>ordenadas</strong> (<code>&lt;ol&gt;</code>). Em ambas, cada item
+            fica dentro de <code>&lt;li&gt;</code> (list item).
+        </p>
+
+        <div class="card">
+            <h2>1) Lista desordenada (UL)</h2>
+            <p>
+                Use <code>&lt;ul&gt;</code> quando a ordem dos itens <strong>não</strong>
+                importa. O navegador costuma mostrar marcadores (bolinhas).
+            </p>
+
+            <ul>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ul>
+
+            <pre><code>&lt;ul&gt;
+    &lt;li&gt;HTML&lt;/li&gt;
+    &lt;li&gt;CSS&lt;/li&gt;
+    &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+            <p>
+                Você pode alterar o estilo do marcador via CSS com
+                <code>list-style-type</code>:
+            </p>
+
+            <ul class="list-square">
+                <li>Marcador quadrado</li>
+                <li>Outro item</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>2) Lista ordenada (OL)</h2>
+            <p>
+                Use <code>&lt;ol&gt;</code> quando a ordem dos itens <strong>importa</strong>
+                (passo a passo, ranking, instruções). O navegador costuma numerar.
+            </p>
+
+            <ol>
+                <li>Abrir o editor</li>
+                <li>Criar o arquivo HTML</li>
+                <li>Salvar e abrir no navegador</li>
+            </ol>
+
+            <pre><code>&lt;ol&gt;
+    &lt;li&gt;Abrir o editor&lt;/li&gt;
+    &lt;li&gt;Criar o arquivo HTML&lt;/li&gt;
+    &lt;li&gt;Salvar e abrir no navegador&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+            <p>
+                Você pode controlar a numeração com os atributos abaixo:
+            </p>
+
+            <ul>
+                <li><code>type</code>: define o tipo (1, A, a, I, i)</li>
+                <li><code>start</code>: define em qual número/letra começa</li>
+                <li><code>reversed</code>: faz a contagem regressiva</li>
+            </ul>
+
+            <ol type="A" start="3">
+                <li>Começa em C</li>
+                <li>Depois D</li>
+                <li>Depois E</li>
+            </ol>
+
+            <ol reversed>
+                <li>Último</li>
+                <li>Meio</li>
+                <li>Primeiro</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2>3) Listas aninhadas (lista dentro de lista)</h2>
+            <p>
+                Você pode criar subitens colocando uma lista <code>&lt;ul&gt;</code> ou
+                <code>&lt;ol&gt;</code> dentro de um <code>&lt;li&gt;</code>.
+            </p>
+
+            <ul>
+                <li>
+                    Front-end
+                    <ul>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                        <li>JavaScript</li>
+                    </ul>
+                </li>
+                <li>
+                    Back-end
+                    <ul>
+                        <li>Node.js</li>
+                        <li>Python</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <pre><code>&lt;ul&gt;
+    &lt;li&gt;
+        Front-end
+        &lt;ul&gt;
+            &lt;li&gt;HTML&lt;/li&gt;
+            &lt;li&gt;CSS&lt;/li&gt;
+            &lt;li&gt;JavaScript&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+        </div>
+
+        <div class="card">
+            <h2>Resumo</h2>
+            <ul>
+                <li><code>&lt;ul&gt;</code>: lista sem ordem (marcadores)</li>
+                <li><code>&lt;ol&gt;</code>: lista com ordem (numeração/letras)</li>
+                <li><code>&lt;li&gt;</code>: item da lista</li>
+            </ul>
+        </div>
+        </main>
+    </body>
+</html>

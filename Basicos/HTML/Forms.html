@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Formulários em HTML (Forms)</title>
+
+        <!-- Padronização visual: usa o mesmo arquivo do projeto -->
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+    <body>
+        <header class="container">
+            <h1>Formulários em HTML</h1>
+            <p>
+                Um <strong>formulário</strong> (&lt;form&gt;) coleta dados do usuário e
+                envia para um servidor (ou para um script) através de um método
+                (<code>GET</code> ou <code>POST</code>).
+            </p>
+        </header>
+
+        <main class="container">
+            <section class="card">
+                <h2>1) O elemento &lt;form&gt;</h2>
+                <p>
+                    O <code>&lt;form&gt;</code> envolve os campos e define como os dados serão enviados.
+                    Principais atributos:
+                </p>
+
+                <ul>
+                    <li>
+                        <code>action</code>: URL de destino (endpoint) que receberá os dados.
+                    </li>
+                    <li>
+                        <code>method</code>: <code>GET</code> (dados na URL) ou <code>POST</code> (dados no corpo).
+                    </li>
+                    <li>
+                        <code>autocomplete</code>: sugere preenchimento automático (on/off).
+                    </li>
+                    <li>
+                        <code>enctype</code>: tipo de codificação (ex.: upload de arquivo usa
+                        <code>multipart/form-data</code>).
+                    </li>
+                </ul>
+
+                <pre class="code">
+&lt;form action="/enviar" method="post" autocomplete="on"&gt;
+    ...
+&lt;/form&gt;
+                </pre>
+            </section>
+
+            <section class="card">
+                <h2>2) Acessibilidade: label + id</h2>
+                <p>
+                    Sempre associe <code>&lt;label&gt;</code> ao campo via
+                    <code>for</code> + <code>id</code>. Isso melhora acessibilidade e usabilidade.
+                </p>
+                <pre class="code">
+&lt;label for="email"&gt;E-mail&lt;/label&gt;
+&lt;input id="email" name="email" type="email" /&gt;
+                </pre>
+            </section>
+
+            <section class="card">
+                <h2>3) Exemplo: Formulário de Login</h2>
+
+                <!-- Exemplo educativo: action fictícia -->
+                <form class="form" action="/login" method="post" autocomplete="on">
+                    <fieldset class="fieldset">
+                        <legend>Entrar</legend>
+
+                        <div class="field">
+                            <label for="login-email">E-mail</label>
+                            <input
+                                id="login-email"
+                                name="email"
+                                type="email"
+                                placeholder="voce@exemplo.com"
+                                required
+                                autocomplete="email"
+                            />
+                            <small class="help">Use um e-mail válido (type="email").</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="login-password">Senha</label>
+                            <input
+                                id="login-password"
+                                name="password"
+                                type="password"
+                                placeholder="Sua senha"
+                                required
+                                minlength="6"
+                                autocomplete="current-password"
+                            />
+                            <small class="help">Exemplo de validação: minlength="6".</small>
+                        </div>
+
+                        <div class="row">
+                            <label class="checkbox">
+                                <input type="checkbox" name="remember" value="1" />
+                                Lembrar de mim
+                            </label>
+
+                            <button class="btn" type="submit">Entrar</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </section>
+
+            <section class="card">
+                <h2>4) Exemplo: Formulário de Contato</h2>
+                <p>
+                    Campos comuns: texto, número, seleção, rádio, textarea e upload (com
+                    <code>enctype</code>).
+                </p>
+
+                <form
+                    class="form"
+                    action="/contato"
+                    method="post"
+                    enctype="multipart/form-data"
+                    autocomplete="on"
+                >
+                    <fieldset class="fieldset">
+                        <legend>Contato</legend>
+
+                        <div class="field">
+                            <label for="name">Nome</label>
+                            <input
+                                id="name"
+                                name="name"
+                                type="text"
+                                placeholder="Seu nome completo"
+                                required
+                                autocomplete="name"
+                            />
+                        </div>
+
+                        <div class="field">
+                            <label for="phone">Telefone</label>
+                            <input
+                                id="phone"
+                                name="phone"
+                                type="tel"
+                                placeholder="(11) 99999-9999"
+                                inputmode="tel"
+                                autocomplete="tel"
+                                pattern="^\(\d{2}\)\s?\d{4,5}-\d{4}$"
+                            />
+                            <small class="help">
+                                Exemplo de <code>pattern</code>: (11) 99999-9999
+                            </small>
+                        </div>
+
+                        <div class="field">
+                            <label for="subject">Assunto</label>
+                            <select id="subject" name="subject" required>
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="duvida">Dúvida</option>
+                                <option value="orcamento">Orçamento</option>
+                                <option value="suporte">Suporte</option>
+                            </select>
+                        </div>
+
+                        <fieldset class="fieldset">
+                            <legend>Preferência de contato</legend>
+
+                            <div class="row">
+                                <label class="radio">
+                                    <input type="radio" name="contactPreference" value="email" checked />
+                                    E-mail
+                                </label>
+
+                                <label class="radio">
+                                    <input type="radio" name="contactPreference" value="whatsapp" />
+                                    WhatsApp
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <div class="field">
+                            <label for="message">Mensagem</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                rows="5"
+                                placeholder="Descreva sua necessidade..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="field">
+                            <label for="attachment">Anexo (opcional)</label>
+                            <input id="attachment" name="attachment" type="file" />
+                            <small class="help">
+                                Para upload, o <code>&lt;form&gt;</code> usa <code>enctype="multipart/form-data"</code>.
+                            </small>
+                        </div>
+
+                        <div class="row">
+                            <button class="btn" type="reset">Limpar</button>
+                            <button class="btn primary" type="submit">Enviar</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </section>
+
+            <section class="card">
+                <h2>5) Dicas rápidas</h2>
+                <ul>
+                    <li>Use <code>required</code>, <code>minlength</code>, <code>pattern</code> para validação básica.</li>
+                    <li>Prefira <code>type</code> correto (<code>email</code>, <code>tel</code>, <code>date</code>, etc.).</li>
+                    <li>Use <code>name</code> em todos os campos: é ele que “vira” dado enviado.</li>
+                    <li>Organize com <code>&lt;fieldset&gt;</code> e <code>&lt;legend&gt;</code>.</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="container">
+            <small>
+                Arquivo: <code>Forms.html</code> — exemplos educativos de <code>&lt;form&gt;</code>.
+            </small>
+        </footer>
+    </body>
+</html>

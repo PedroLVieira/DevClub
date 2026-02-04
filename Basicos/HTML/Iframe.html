@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Iframe (HTML) — Explicação e exemplos</title>
+
+        <!-- Padronização: use o mesmo arquivo de estilos do projeto -->
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+
+    <body>
+        <header class="header">
+            <div class="container">
+                <h1 class="title">Iframe no HTML</h1>
+                <p class="subtitle">
+                    O elemento <strong>&lt;iframe&gt;</strong> permite incorporar outra página (ou conteúdo externo) dentro da
+                    sua página.
+                </p>
+            </div>
+        </header>
+
+        <main class="container">
+            <section class="card">
+                <h2>O que é um iframe?</h2>
+                <p>
+                    <strong>Iframe</strong> significa <em>inline frame</em> (quadro embutido). Ele cria uma “janela” dentro do
+                    documento atual e carrega uma URL dentro dela.
+                </p>
+
+                <h3>Quando usar</h3>
+                <ul>
+                    <li>Incorporar mapas, vídeos, formulários ou páginas internas do seu projeto.</li>
+                    <li>Mostrar conteúdo de terceiros (quando permitido), mantendo seu layout principal.</li>
+                </ul>
+
+                <h3>Quando evitar</h3>
+                <ul>
+                    <li>Quando você precisa de controle total do conteúdo (muitos sites bloqueiam incorporação).</li>
+                    <li>Quando pode prejudicar performance/SEO ou causar problemas de responsividade.</li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2>Sintaxe básica</h2>
+
+                <pre class="code-block"><code>&lt;iframe
+    src="https://example.com"
+    title="Exemplo de iframe"
+    width="600"
+    height="400"
+&gt;&lt;/iframe&gt;</code></pre>
+
+                <p>
+                    Atributos comuns:
+                    <strong>src</strong> (URL), <strong>title</strong> (acessibilidade), <strong>width/height</strong> (tamanho).
+                </p>
+            </section>
+
+            <section class="card">
+                <h2>Exemplo prático (conteúdo interno)</h2>
+                <p>
+                    A forma mais estável de aprender é apontar o iframe para um arquivo do seu próprio projeto (por exemplo,
+                    <code>./index.html</code>, se existir).
+                </p>
+
+                <div class="iframe-wrapper">
+                    <iframe
+                        class="iframe"
+                        src="./index.html"
+                        title="Exemplo: carregando uma página do próprio projeto"
+                        loading="lazy"
+                    ></iframe>
+                </div>
+
+                <p class="note">
+                    Se <code>index.html</code> não existir na mesma pasta, altere o <code>src</code> para um arquivo válido do seu
+                    projeto.
+                </p>
+            </section>
+
+            <section class="card">
+                <h2>Segurança: sandbox e permissões</h2>
+                <p>
+                    Iframes podem representar riscos quando carregam conteúdo de terceiros. Por isso, use
+                    <strong>sandbox</strong> para restringir o que o conteúdo embutido pode fazer.
+                </p>
+
+                <pre class="code-block"><code>&lt;iframe
+    src="https://example.com"
+    title="Iframe com restrições"
+    sandbox
+&gt;&lt;/iframe&gt;</code></pre>
+
+                <p>
+                    Você pode liberar permissões específicas (com cuidado), por exemplo:
+                </p>
+
+                <pre class="code-block"><code>&lt;iframe
+    src="https://example.com"
+    title="Iframe com permissões específicas"
+    sandbox="allow-scripts allow-forms"
+&gt;&lt;/iframe&gt;</code></pre>
+
+                <p>
+                    Para recursos específicos (câmera, autoplay, etc.), use o atributo <strong>allow</strong> quando necessário:
+                </p>
+
+                <pre class="code-block"><code>&lt;iframe
+    src="https://example.com"
+    title="Iframe com allow"
+    allow="fullscreen; autoplay"
+&gt;&lt;/iframe&gt;</code></pre>
+            </section>
+
+            <section class="card">
+                <h2>Responsividade</h2>
+                <p>
+                    Um jeito comum é envolver o iframe em um container e controlar o tamanho via CSS (por exemplo, largura 100%).
+                    Aqui no HTML, deixamos classes (<code>iframe-wrapper</code> e <code>iframe</code>) para o seu
+                    <code>styles.css</code> padronizar.
+                </p>
+
+                <p class="note">
+                    Sugestão (no <code>styles.css</code>): defina <code>.iframe { width: 100%; height: 60vh; border: 0; }</code>.
+                </p>
+            </section>
+
+            <footer class="footer">
+                <p class="muted">
+                    Dica: sempre defina <code>title</code> no iframe (acessibilidade) e prefira <code>loading="lazy"</code> quando
+                    possível.
+                </p>
+            </footer>
+        </main>
+    </body>
+</html>
