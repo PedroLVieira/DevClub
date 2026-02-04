@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pseudo-classes e Pseudo-elementos (CSS)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Estilos extras só para as demos (usa as variáveis do styles.css) */
+    .demo {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      width: fit-content;
+    }
+    .btn:hover { border-color: var(--primary); background: rgba(124, 58, 237, 0.06); }
+    .btn:active { transform: translateY(1px); }
+    .btn:focus-visible { outline: 3px solid rgba(124, 58, 237, 0.30); outline-offset: 2px; }
+
+    .field {
+      width: 100%;
+      max-width: 520px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+    .field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18); }
+
+    /* Pseudo-classes: demos */
+    .demo-link {
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      text-decoration: none;
+      color: var(--text);
+      background: #fff;
+      width: fit-content;
+    }
+    .demo-link:hover { border-color: var(--primary); background: var(--primary); color: #fff; text-decoration: none; }
+    .demo-link:visited { color: #4f46e5; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+    .chip:nth-child(odd) { border-color: rgba(124, 58, 237, 0.40); background: rgba(124, 58, 237, 0.06); }
+    .chip:not(.ok) { opacity: 0.75; }
+
+    .box-focus-within {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+    }
+    .box-focus-within:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18); }
+
+    /* Pseudo-elementos: demos */
+    .badge::before {
+      content: "Dica";
+      display: inline-block;
+      margin-right: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #166534;
+      font-weight: 700;
+      font-size: 0.85rem;
+      vertical-align: middle;
+    }
+
+    .underline::after {
+      content: "";
+      display: block;
+      height: 3px;
+      width: 110px;
+      border-radius: 99px;
+      background: var(--primary);
+      margin-top: 8px;
+      opacity: 0.8;
+    }
+
+    .first-letter-demo::first-letter {
+      font-size: 2.2em;
+      font-weight: 800;
+      color: var(--primary);
+      margin-right: 6px;
+    }
+
+    .first-line-demo::first-line { font-weight: 800; }
+
+    .selection-demo::selection {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .field::placeholder { color: var(--muted); }
+
+    .marker-demo li::marker { color: var(--primary); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Pseudo-classes e Pseudo-elementos</h1>
+    <p>Como estilizar estados (pseudo-classes) e “partes” de elementos (pseudo-elementos) no CSS.</p>
+  </header>
+
+  <nav class="toc">
+    <h2>Conteúdo</h2>
+    <ul>
+      <li><a href="#conceitos">Conceitos</a></li>
+      <li><a href="#pseudo-classes">Pseudo-classes</a></li>
+      <li><a href="#pseudo-elementos">Pseudo-elementos</a></li>
+      <li><a href="#boas-praticas">Boas práticas</a></li>
+      <li><a href="#resumo">Resumo</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="conceitos" class="card">
+      <h2>Conceitos</h2>
+      <p>
+        <strong>Pseudo-classes</strong> estilizam um <em>estado</em> do elemento (ex.: quando o mouse está em cima,
+        quando está em foco, quando está marcado).
+      </p>
+      <p>
+        <strong>Pseudo-elementos</strong> estilizam uma <em>parte</em> do elemento ou criam um “elemento virtual”
+        (ex.: primeira letra, marcador da lista, um <code>::before</code> para inserir um detalhe visual).
+      </p>
+      <pre><code>/* Pseudo-classe: estado */
+a:hover { text-decoration: underline; }
+
+/* Pseudo-elemento: parte/virtual */
+p::first-letter { font-size: 2em; }
+      </code></pre>
+      <p>
+        Observação: hoje o padrão é usar <code>::</code> para pseudo-elementos e <code>:</code> para pseudo-classes.
+        Alguns pseudo-elementos ainda aceitam <code>:</code> por compatibilidade antiga (ex.: <code>:before</code>),
+        mas prefira <code>::before</code>.
+      </p>
+    </section>
+
+    <section id="pseudo-classes" class="card">
+      <h2>Pseudo-classes (estados)</h2>
+      <p>Alguns exemplos comuns:</p>
+      <ul>
+        <li><code>:hover</code> — quando o mouse passa por cima.</li>
+        <li><code>:active</code> — enquanto está sendo clicado/pressionado.</li>
+        <li><code>:focus</code> / <code>:focus-visible</code> — quando recebe foco (teclado, clique, etc.).</li>
+        <li><code>:checked</code> — quando checkbox/radio está marcado.</li>
+        <li><code>:disabled</code> — quando o campo/botão está desabilitado.</li>
+        <li><code>:first-child</code>, <code>:last-child</code>, <code>:nth-child()</code> — “posição” entre irmãos.</li>
+        <li><code>:not()</code> — negação (seleciona tudo menos…).</li>
+        <li><code>:focus-within</code> — quando <em>qualquer filho</em> está em foco (ótimo para formulários).</li>
+      </ul>
+
+      <h3 class="underline">Demos rápidas</h3>
+      <div class="demo">
+        <div>
+          <a class="demo-link" href="#pseudo-classes">Passe o mouse aqui (:hover)</a>
+        </div>
+
+        <div class="row">
+          <button class="btn" type="button">Clique e segure (:active)</button>
+          <button class="btn" type="button" disabled style="opacity:.6; cursor:not-allowed;">Desabilitado (:disabled)</button>
+        </div>
+
+        <div class="box-focus-within">
+          <p style="margin: 0 0 8px; color: var(--muted);">Clique no campo para ver <code>:focus</code> e no container para ver <code>:focus-within</code>.</p>
+          <input class="field" type="text" placeholder="Foco aqui (:focus)" />
+        </div>
+
+        <label style="display:flex; gap:10px; align-items:center; width: fit-content;">
+          <input type="checkbox" />
+          <span>Marque para testar <code>:checked</code> (ver código abaixo)</span>
+        </label>
+
+        <div>
+          <p style="margin:0 0 8px; color: var(--muted);">Exemplo de <code>:nth-child(odd)</code> e <code>:not(.ok)</code>:</p>
+          <div class="chips">
+            <span class="chip ok">Item 1</span>
+            <span class="chip">Item 2</span>
+            <span class="chip ok">Item 3</span>
+            <span class="chip">Item 4</span>
+            <span class="chip ok">Item 5</span>
+          </div>
+        </div>
+      </div>
+
+      <pre><code>/* :hover e :active */
+.demo-link:hover {
+  background: var(--primary);
+  color: #fff;
+}
+.btn:active { transform: translateY(1px); }
+
+/* :focus e :focus-within */
+.field:focus { border-color: var(--primary); }
+.box-focus-within:focus-within { border-color: var(--primary); }
+
+/* :nth-child e :not */
+.chip:nth-child(odd) { background: rgba(124, 58, 237, 0.06); }
+.chip:not(.ok) { opacity: 0.75; }
+      </code></pre>
+    </section>
+
+    <section id="pseudo-elementos" class="card">
+      <h2>Pseudo-elementos (partes / “elementos virtuais”)</h2>
+      <p>Alguns dos mais usados:</p>
+      <ul>
+        <li><code>::before</code> e <code>::after</code> — cria conteúdo decorativo antes/depois do conteúdo real.</li>
+        <li><code>::first-letter</code> — estiliza a primeira letra.</li>
+        <li><code>::first-line</code> — estiliza a primeira linha (varia conforme a largura do texto).</li>
+        <li><code>::selection</code> — estiliza a seleção do usuário.</li>
+        <li><code>::placeholder</code> — estiliza o placeholder de inputs.</li>
+        <li><code>::marker</code> — estiliza o marcador de listas (<code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code>).</li>
+      </ul>
+
+      <h3 class="underline">Demos rápidas</h3>
+      <div class="demo">
+        <p class="badge" style="margin:0;">Use <code>::before</code> para adicionar um “selo” antes do texto.</p>
+        <p class="underline" style="margin:0;">Use <code>::after</code> para criar um sublinhado decorativo.</p>
+
+        <p class="first-letter-demo" style="margin:0;">
+          Pseudo-elementos podem dar destaque na primeira letra.
+        </p>
+
+        <p class="first-line-demo selection-demo" style="margin:0;">
+          Selecione este texto com o mouse para ver <code>::selection</code>. A primeira linha também muda com <code>::first-line</code>.
+        </p>
+
+        <input class="field" type="text" placeholder="Placeholder estilizado (::placeholder)" />
+
+        <ul class="marker-demo" style="margin: 0; padding-left: 18px;">
+          <li>Marcador 1</li>
+          <li>Marcador 2</li>
+          <li>Marcador 3</li>
+        </ul>
+      </div>
+
+      <pre><code>/* ::before e ::after */
+.badge::before { content: "Dica"; }
+.underline::after { content: ""; height: 3px; background: var(--primary); }
+
+/* ::first-letter e ::first-line */
+.first-letter-demo::first-letter { font-size: 2.2em; }
+.first-line-demo::first-line { font-weight: 800; }
+
+/* ::selection, ::placeholder e ::marker */
+.selection-demo::selection { background: var(--primary); color: #fff; }
+.field::placeholder { color: var(--muted); }
+.marker-demo li::marker { color: var(--primary); }
+      </code></pre>
+    </section>
+
+    <section id="boas-praticas" class="card">
+      <h2>Boas práticas</h2>
+      <ul>
+        <li><strong>Use <code>::</code> nos pseudo-elementos</strong> (padrão moderno) e <code>:</code> nas pseudo-classes.</li>
+        <li><strong>Prefira <code>:focus-visible</code></strong> quando quiser mostrar outline só para navegação por teclado.</li>
+        <li><strong>Evite colocar informação importante só em <code>::before</code>/<code>::after</code></strong> (conteúdo pode não ser lido por leitores de tela dependendo do caso).</li>
+        <li><strong>Use pseudo-classes para feedback</strong> (hover/focus/disabled) e melhorar a usabilidade.</li>
+      </ul>
+    </section>
+
+    <section id="resumo" class="card">
+      <h2>Resumo</h2>
+      <ul>
+        <li><strong>Pseudo-classes</strong> = estados do elemento (ex.: <code>:hover</code>, <code>:focus</code>, <code>:checked</code>).</li>
+        <li><strong>Pseudo-elementos</strong> = partes/virtual (ex.: <code>::before</code>, <code>::first-letter</code>, <code>::marker</code>).</li>
+      </ul>
+      <p style="margin:0; color: var(--muted);">Dica: teste interações com teclado (Tab/Shift+Tab) para ver o foco funcionando.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>DevClub · CSS Básico · Pseudo-classes e pseudo-elementos</small>
+  </footer>
+</body>
+</html>

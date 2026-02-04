@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vídeos no HTML</title>
+
+        <!-- Padronização: usar o mesmo CSS do projeto -->
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+
+    <body>
+        <header class="header">
+            <h1>Vídeos no HTML</h1>
+            <p>
+                O HTML oferece a tag <code>&lt;video&gt;</code> para inserir e controlar
+                vídeos diretamente no navegador, sem plugins.
+            </p>
+        </header>
+
+        <main class="container">
+            <section class="section">
+                <h2>Exemplo básico</h2>
+                <p>
+                    Use <code>controls</code> para exibir os botões (play, pause, volume,
+                    tela cheia etc.). O ideal é fornecer mais de um formato com
+                    <code>&lt;source&gt;</code>, para melhorar compatibilidade.
+                </p>
+
+                <video class="media" controls width="720">
+                    <source src="./assets/video-exemplo.mp4" type="video/mp4" />
+                    <source src="./assets/video-exemplo.webm" type="video/webm" />
+                    Seu navegador não suporta a reprodução de vídeo.
+                </video>
+
+                <pre class="code">
+&lt;video controls width="720"&gt;
+    &lt;source src="./assets/video-exemplo.mp4" type="video/mp4" /&gt;
+    &lt;source src="./assets/video-exemplo.webm" type="video/webm" /&gt;
+    Seu navegador não suporta a reprodução de vídeo.
+&lt;/video&gt;</pre
+                >
+            </section>
+
+            <section class="section">
+                <h2>Atributos importantes</h2>
+                <ul class="list">
+                    <li>
+                        <strong>controls</strong>: mostra os controles do player (recomendado
+                        para acessibilidade e usabilidade).
+                    </li>
+                    <li>
+                        <strong>autoplay</strong>: tenta iniciar automaticamente (muitos
+                        navegadores bloqueiam se não estiver <code>muted</code>).
+                    </li>
+                    <li><strong>muted</strong>: inicia sem som (comum com autoplay).</li>
+                    <li><strong>loop</strong>: reinicia ao terminar.</li>
+                    <li>
+                        <strong>poster</strong>: imagem exibida antes do play (ou enquanto
+                        carrega).
+                    </li>
+                    <li>
+                        <strong>preload</strong>: dica de carregamento:
+                        <code>none</code>, <code>metadata</code> ou <code>auto</code>.
+                    </li>
+                    <li>
+                        <strong>playsinline</strong>: evita abrir em tela cheia automática no
+                        mobile (especialmente iOS).
+                    </li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>Exemplo com poster, autoplay e loop</h2>
+                <p>
+                    Para autoplay funcionar com maior chance, combine
+                    <code>autoplay</code> + <code>muted</code>. Use também
+                    <code>playsinline</code> em dispositivos móveis.
+                </p>
+
+                <video
+                    class="media"
+                    width="720"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    poster="./assets/capa-video.jpg"
+                    preload="metadata"
+                >
+                    <source src="./assets/video-loop.mp4" type="video/mp4" />
+                    Seu navegador não suporta a reprodução de vídeo.
+                </video>
+
+                <pre class="code">
+&lt;video
+    width="720"
+    autoplay
+    muted
+    loop
+    playsinline
+    poster="./assets/capa-video.jpg"
+    preload="metadata"
+&gt;
+    &lt;source src="./assets/video-loop.mp4" type="video/mp4" /&gt;
+&lt;/video&gt;</pre
+                >
+            </section>
+
+            <section class="section">
+                <h2>Legendas (acessibilidade) com &lt;track&gt;</h2>
+                <p>
+                    Use <code>&lt;track&gt;</code> para adicionar legendas (WebVTT).
+                    Isso melhora acessibilidade e compreensão.
+                </p>
+
+                <video class="media" controls width="720">
+                    <source src="./assets/video-com-legenda.mp4" type="video/mp4" />
+                    <track
+                        src="./assets/legendas-pt.vtt"
+                        kind="subtitles"
+                        srclang="pt"
+                        label="Português"
+                        default
+                    />
+                    Seu navegador não suporta a reprodução de vídeo.
+                </video>
+
+                <pre class="code">
+&lt;video controls width="720"&gt;
+    &lt;source src="./assets/video-com-legenda.mp4" type="video/mp4" /&gt;
+    &lt;track
+        src="./assets/legendas-pt.vtt"
+        kind="subtitles"
+        srclang="pt"
+        label="Português"
+        default
+    /&gt;
+&lt;/video&gt;</pre
+                >
+            </section>
+
+            <section class="section">
+                <h2>Boas práticas</h2>
+                <ul class="list">
+                    <li>Fornecer mais de um formato (ex.: MP4 e WebM).</li>
+                    <li>Adicionar legendas com <code>&lt;track&gt;</code>.</li>
+                    <li>
+                        Evitar autoplay com som (tende a ser bloqueado e piora a experiência).
+                    </li>
+                    <li>
+                        Usar tamanhos responsivos via CSS (ex.: <code>max-width: 100%</code>).
+                    </li>
+                </ul>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <small>
+                Dica: ajuste os caminhos em <code>src</code> para seus arquivos reais
+                dentro do projeto (ex.: <code>./assets/</code>).
+            </small>
+        </footer>
+    </body>
+</html>

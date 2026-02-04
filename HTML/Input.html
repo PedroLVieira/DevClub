@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Input no HTML</title>
+
+        <!-- Padronize o visual no arquivo styles.css -->
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+
+    <body>
+        <main class="container">
+            <header class="page-header">
+                <h1>Input no HTML</h1>
+                <p class="subtitle">
+                    O elemento <code>&lt;input&gt;</code> é usado para coletar dados do usuário. O
+                    comportamento muda conforme o atributo <code>type</code>.
+                </p>
+            </header>
+
+            <section class="card">
+                <h2>Boas práticas</h2>
+                <ul class="list">
+                    <li>Use <code>&lt;label for=""&gt;</code> apontando para o <code>id</code> do input.</li>
+                    <li>Defina <code>name</code> (é o que vai no envio do formulário).</li>
+                    <li>Use <code>required</code>, <code>min</code>, <code>max</code>, <code>pattern</code> para validação.</li>
+                    <li>Prefira <code>autocomplete</code> para melhorar a experiência.</li>
+                    <li>Use mensagens de ajuda com <code>aria-describedby</code>.</li>
+                </ul>
+            </section>
+
+            <section class="card">
+                <h2>Exemplos de inputs (com explicações)</h2>
+
+                <form class="form" action="#" method="post">
+                    <fieldset class="fieldset">
+                        <legend>Texto e validação</legend>
+
+                        <div class="field">
+                            <label for="nome">Nome (type="text")</label>
+                            <input
+                                id="nome"
+                                name="nome"
+                                type="text"
+                                placeholder="Ex.: Pedro Silva"
+                                autocomplete="name"
+                                required
+                            />
+                            <small class="hint">Coleta texto livre. Use <code>required</code> para obrigar o preenchimento.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="email">E-mail (type="email")</label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="exemplo@dominio.com"
+                                autocomplete="email"
+                                required
+                            />
+                            <small class="hint">Valida formato de e-mail automaticamente no navegador.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="senha">Senha (type="password")</label>
+                            <input
+                                id="senha"
+                                name="senha"
+                                type="password"
+                                placeholder="Mínimo 8 caracteres"
+                                minlength="8"
+                                required
+                                autocomplete="new-password"
+                            />
+                            <small class="hint">Oculta os caracteres. Use <code>minlength</code> para tamanho mínimo.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="cep">CEP (pattern)</label>
+                            <input
+                                id="cep"
+                                name="cep"
+                                type="text"
+                                inputmode="numeric"
+                                placeholder="00000-000"
+                                pattern="^\d{5}-?\d{3}$"
+                                aria-describedby="cep-ajuda"
+                                required
+                            />
+                            <small id="cep-ajuda" class="hint">
+                                Exemplo de validação com <code>pattern</code>. Aceita <code>00000-000</code> ou <code>00000000</code>.
+                            </small>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                        <legend>Números e datas</legend>
+
+                        <div class="field">
+                            <label for="idade">Idade (type="number")</label>
+                            <input id="idade" name="idade" type="number" min="0" max="120" step="1" />
+                            <small class="hint">Use <code>min</code>, <code>max</code> e <code>step</code> para limitar valores.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="nascimento">Data de nascimento (type="date")</label>
+                            <input id="nascimento" name="nascimento" type="date" />
+                            <small class="hint">Mostra um seletor de data (varia por navegador/sistema).</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="hora">Horário (type="time")</label>
+                            <input id="hora" name="hora" type="time" />
+                            <small class="hint">Bom para agendamento e horários.</small>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                        <legend>Escolhas e seletores</legend>
+
+                        <div class="field">
+                            <label for="cor">Cor (type="color")</label>
+                            <input id="cor" name="cor" type="color" value="#2f6feb" />
+                            <small class="hint">Retorna um valor hexadecimal, como <code>#rrggbb</code>.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="nivel">Nível (type="range")</label>
+                            <div class="inline">
+                                <input id="nivel" name="nivel" type="range" min="0" max="10" value="5" />
+                                <output id="nivelValor" for="nivel">5</output>
+                            </div>
+                            <small class="hint">Útil para “nota”, intensidade ou volume.</small>
+                        </div>
+
+                        <div class="field">
+                            <span class="label">Interesses (type="checkbox")</span>
+                            <div class="options">
+                                <label class="option">
+                                    <input type="checkbox" name="interesses" value="html" />
+                                    HTML
+                                </label>
+                                <label class="option">
+                                    <input type="checkbox" name="interesses" value="css" />
+                                    CSS
+                                </label>
+                                <label class="option">
+                                    <input type="checkbox" name="interesses" value="js" />
+                                    JavaScript
+                                </label>
+                            </div>
+                            <small class="hint">Checkbox permite múltiplas seleções.</small>
+                        </div>
+
+                        <div class="field">
+                            <span class="label">Plano (type="radio")</span>
+                            <div class="options">
+                                <label class="option">
+                                    <input type="radio" name="plano" value="basico" checked />
+                                    Básico
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="plano" value="pro" />
+                                    Pro
+                                </label>
+                            </div>
+                            <small class="hint">Radio permite escolher apenas uma opção (mesmo <code>name</code>).</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="tecnologia">Tecnologia (datalist)</label>
+                            <input id="tecnologia" name="tecnologia" list="listaTecnologias" placeholder="Ex.: React" />
+                            <datalist id="listaTecnologias">
+                                <option value="HTML"></option>
+                                <option value="CSS"></option>
+                                <option value="JavaScript"></option>
+                                <option value="TypeScript"></option>
+                                <option value="React"></option>
+                                <option value="Node.js"></option>
+                            </datalist>
+                            <small class="hint">Sugestões de preenchimento, sem travar o valor (diferente de select).</small>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="fieldset">
+                        <legend>Outros tipos úteis</legend>
+
+                        <div class="field">
+                            <label for="arquivo">Arquivo (type="file")</label>
+                            <input id="arquivo" name="arquivo" type="file" accept=".png,.jpg,.jpeg,.pdf" />
+                            <small class="hint">Use <code>accept</code> para sugerir tipos de arquivo.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="site">Site (type="url")</label>
+                            <input id="site" name="site" type="url" placeholder="https://exemplo.com" />
+                            <small class="hint">Valida formato de URL.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="busca">Busca (type="search")</label>
+                            <input id="busca" name="busca" type="search" placeholder="Buscar..." />
+                            <small class="hint">Semântica de busca (alguns navegadores exibem botão para limpar).</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="telefone">Telefone (type="tel")</label>
+                            <input id="telefone" name="telefone" type="tel" placeholder="(11) 99999-9999" autocomplete="tel" />
+                            <small class="hint">Não valida o formato por padrão; combine com <code>pattern</code> se necessário.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="somenteLeitura">Somente leitura (readonly)</label>
+                            <input
+                                id="somenteLeitura"
+                                name="somenteLeitura"
+                                type="text"
+                                value="Este valor pode ser copiado, mas não editado"
+                                readonly
+                            />
+                            <small class="hint"><code>readonly</code> mantém o valor no envio, mas impede edição.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="desabilitado">Desabilitado (disabled)</label>
+                            <input id="desabilitado" name="desabilitado" type="text" value="Não envia no form" disabled />
+                            <small class="hint"><code>disabled</code> impede interação e o campo não é enviado.</small>
+                        </div>
+                    </fieldset>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" type="submit">Enviar</button>
+                        <button class="btn" type="reset">Limpar</button>
+                    </div>
+                </form>
+            </section>
+
+            <footer class="page-footer">
+                <p class="muted">
+                    Dica: valide também no back-end. A validação do navegador melhora UX, mas não é segurança.
+                </p>
+            </footer>
+        </main>
+
+        <script>
+            const range = document.getElementById("nivel");
+            const out = document.getElementById("nivelValor");
+
+            function syncRange() {
+                out.textContent = range.value;
+            }
+
+            range.addEventListener("input", syncRange);
+            syncRange();
+        </script>
+    </body>
+</html>
