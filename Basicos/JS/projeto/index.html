@@ -24,6 +24,14 @@
                     <span class="rate-label">EUR/BRL</span>
                     <strong class="rate-value" id="rate-eur">--</strong>
                 </div>
+                <div class="rate-item">
+                    <span class="rate-label">GBP/BRL</span>
+                    <strong class="rate-value" id="rate-gbp">--</strong>
+                </div>
+                <div class="rate-item">
+                    <span class="rate-label">BTC/BRL</span>
+                    <strong class="rate-value" id="rate-btc">--</strong>
+                </div>
             </div>
             <p class="rate-updated">Atualizado: <span id="rate-updated">--</span></p>
             <p class="rate-status" id="rate-status"></p>
@@ -32,15 +40,22 @@
         <main>
         <label>
             Converter <b>de</b>
-            <select>
-                <option>R$ Real Brasileiro</option>
+            <select class="from-currency">
+                <option value="real">R$ Real Brasileiro</option>
+                <option value="dolar">US$ Dólar Americano</option>
+                <option value="euro">€ Euro</option>
+                <option value="libra">£ Libra</option>
+                <option value="bitcoin">₿ Bitcoin</option>
             </select>
         </label>
         <label>
             Converter <b>para</b>
-            <select class="type-currency">
+            <select class="type-currency to-currency">
+                <option value="real">R$ Real Brasileiro</option>
                 <option value="dolar">US$ Dólar Americano</option>
                 <option value="euro">€ Euro</option>
+                <option value="libra">£ Libra</option>
+                <option value="bitcoin">₿ Bitcoin</option>
             </select>
         </label>
         <label>
