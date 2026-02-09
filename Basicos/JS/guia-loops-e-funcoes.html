@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guia Prático — Loops e Funções (JS)</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0f14;
+        --panel: #101826;
+        --panel-2: #0e1522;
+        --text: #e7edf5;
+        --muted: #a9b7c9;
+        --border: rgba(231, 237, 245, 0.12);
+        --accent: #7c5cff;
+        --accent-2: #2dd4bf;
+        --warn: #fbbf24;
+        --danger: #fb7185;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        background: radial-gradient(1200px 600px at 20% -10%, rgba(124, 92, 255, 0.20), transparent 60%),
+          radial-gradient(1200px 600px at 85% 0%, rgba(45, 212, 191, 0.14), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        line-height: 1.45;
+      }
+
+      header {
+        padding: 28px 16px 16px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(16, 24, 38, 0.85), rgba(11, 15, 20, 0.2));
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(10px);
+        z-index: 5;
+      }
+
+      .container {
+        max-width: 1060px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+
+      .sub {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      nav {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--text);
+        border: 1px solid var(--border);
+        background: rgba(16, 24, 38, 0.55);
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        transition: transform 120ms ease, border-color 120ms ease;
+        white-space: nowrap;
+      }
+
+      nav a:hover {
+        transform: translateY(-1px);
+        border-color: rgba(124, 92, 255, 0.55);
+      }
+
+      main {
+        padding: 18px 16px 48px;
+      }
+
+      section {
+        margin: 18px 0;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(16, 24, 38, 0.75), rgba(14, 21, 34, 0.55));
+      }
+
+      section h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+
+      .hint {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 14px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      pre {
+        margin: 0;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(11, 15, 20, 0.7);
+        overflow: auto;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 12.5px;
+        color: #eaf2ff;
+      }
+
+      .demo {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: rgba(11, 15, 20, 0.35);
+        padding: 12px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .row {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(12, 1fr);
+        align-items: end;
+      }
+
+      .field {
+        grid-column: span 4;
+        display: grid;
+        gap: 6px;
+      }
+
+      .field.small {
+        grid-column: span 3;
+      }
+
+      .field.wide {
+        grid-column: span 6;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      @media (max-width: 900px) {
+        .field,
+        .field.small,
+        .field.wide,
+        .field.full {
+          grid-column: 1 / -1;
+        }
+      }
+
+      label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 9px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(231, 237, 245, 0.14);
+        background: rgba(16, 24, 38, 0.6);
+        color: var(--text);
+        outline: none;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: rgba(124, 92, 255, 0.65);
+        box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.18);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      button {
+        border: 1px solid var(--border);
+        background: rgba(124, 92, 255, 0.18);
+        color: var(--text);
+        padding: 9px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 12px;
+        transition: transform 120ms ease, border-color 120ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(124, 92, 255, 0.55);
+      }
+
+      button.secondary {
+        background: rgba(45, 212, 191, 0.12);
+      }
+
+      button.danger {
+        background: rgba(251, 113, 133, 0.14);
+      }
+
+      .out {
+        border: 1px dashed rgba(231, 237, 245, 0.18);
+        border-radius: 12px;
+        padding: 10px;
+        background: rgba(16, 24, 38, 0.35);
+      }
+
+      .out-title {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+
+      .out pre {
+        border: 0;
+        background: transparent;
+        padding: 0;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(16, 24, 38, 0.45);
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .pill strong {
+        color: var(--text);
+      }
+
+      footer {
+        padding: 18px 16px 28px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 6px;
+        border: 1px solid rgba(231, 237, 245, 0.18);
+        background: rgba(11, 15, 20, 0.55);
+        color: var(--text);
+      }
+
+      .warn {
+        color: var(--warn);
+      }
+
+      .ok {
+        color: var(--accent-2);
+      }
+
+      .danger-text {
+        color: var(--danger);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Guia Prático — Loops e Funções (JavaScript)</h1>
+        <p class="sub">
+          Explicações rápidas + amostras práticas para testar no navegador.
+          Dica: abra o DevTools com <span class="kbd">F12</span>.
+        </p>
+        <nav aria-label="Navegação por tópicos">
+          <a href="#for">for</a>
+          <a href="#desafio-for">Desafio for</a>
+          <a href="#for-of">for...of</a>
+          <a href="#for-in">for...in</a>
+          <a href="#do-while">do...while</a>
+          <a href="#foreach">forEach</a>
+          <a href="#args">Argumentos/Parâmetros</a>
+          <a href="#return">Return</a>
+          <a href="#desafio">Desafio resolvido</a>
+          <a href="#arrow">Arrow Functions</a>
+          <a href="#anon">Função anônima</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="for">
+        <h2>for</h2>
+        <p class="hint">
+          O <strong>for</strong> é ótimo quando você sabe quantas repetições vai
+          fazer. Ele tem três partes: inicialização, condição e incremento.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Estrutura
+for (let i = 0; i &lt; 5; i++) {
+  console.log(i);
+}
+
+// Exemplo: somar de 1 até 5
+let soma = 0;
+for (let i = 1; i &lt;= 5; i++) {
+  soma += i;
+}
+console.log(soma); // 15
+</code></pre>
+
+          <div class="demo" data-demo="for">
+            <div class="row">
+              <div class="field small">
+                <label for="forStart">Início</label>
+                <input id="forStart" type="number" value="1" />
+              </div>
+              <div class="field small">
+                <label for="forEnd">Fim</label>
+                <input id="forEnd" type="number" value="10" />
+              </div>
+              <div class="field small">
+                <label for="forStep">Passo</label>
+                <input id="forStep" type="number" value="1" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-for">Gerar sequência</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outFor">Clique em “Gerar sequência”.</code></pre>
+            </div>
+            <p class="hint">
+              Dica: se o passo for 0, o loop trava — aqui eu bloqueio isso.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="desafio-for">
+        <h2>Desafio for</h2>
+        <p class="hint">
+          Desafio clássico: somar apenas os números <strong>pares</strong> de 1
+          até N usando <strong>for</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Solução (ideia)
+let soma = 0;
+for (let i = 1; i &lt;= N; i++) {
+  if (i % 2 === 0) soma += i;
+}
+</code></pre>
+
+          <div class="demo" data-demo="desafio-for">
+            <div class="row">
+              <div class="field small">
+                <label for="challengeN">N</label>
+                <input id="challengeN" type="number" value="20" min="1" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="secondary" data-action="run-challenge-for">Resolver desafio</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outChallengeFor">Clique em “Resolver desafio”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="for-of">
+        <h2>for...of</h2>
+        <p class="hint">
+          <strong>for...of</strong> percorre valores de iteráveis (como arrays e
+          strings). É perfeito para “pegar cada item”.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Array
+const nomes = ["Ana", "Bia", "Caio"];
+for (const nome of nomes) {
+  console.log(nome);
+}
+
+// String
+for (const letra of "JS") {
+  console.log(letra);
+}
+</code></pre>
+
+          <div class="demo" data-demo="for-of">
+            <div class="row">
+              <div class="field full">
+                <label for="forOfList">Lista (separe por vírgula)</label>
+                <input id="forOfList" value="Ana, Bia, Caio" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-forof">Percorrer com for...of</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outForOf">Clique em “Percorrer com for...of”.</code></pre>
+            </div>
+            <p class="hint">
+              No <strong>for...of</strong> você recebe o <em>valor</em>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="for-in">
+        <h2>for...in</h2>
+        <p class="hint">
+          <strong>for...in</strong> percorre as <strong>chaves</strong> de um
+          objeto (keys). Em arrays, ele percorre os índices (em forma de texto).
+        </p>
+
+        <div class="grid">
+          <pre><code>// Objeto
+const pessoa = { nome: "Ana", idade: 20 };
+for (const chave in pessoa) {
+  console.log(chave, pessoa[chave]);
+}
+
+// Array (índices)
+const nums = [10, 20, 30];
+for (const i in nums) {
+  console.log(i, nums[i]);
+}
+</code></pre>
+
+          <div class="demo" data-demo="for-in">
+            <div class="row">
+              <div class="field wide">
+                <label for="forInTarget">Percorrer</label>
+                <select id="forInTarget">
+                  <option value="object">Objeto (pessoa)</option>
+                  <option value="array">Array (nums)</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-forin">Percorrer com for...in</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outForIn">Clique em “Percorrer com for...in”.</code></pre>
+            </div>
+            <p class="hint">
+              Regra prática: <span class="ok">for...of</span> para valores,
+              <span class="warn">for...in</span> para chaves.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="do-while">
+        <h2>do...while</h2>
+        <p class="hint">
+          O <strong>do...while</strong> executa o bloco <em>pelo menos uma vez</em>
+          e só depois verifica a condição.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Estrutura
+let i = 0;
+do {
+  console.log(i);
+  i++;
+} while (i &lt; 3);
+</code></pre>
+
+          <div class="demo" data-demo="do-while">
+            <div class="row">
+              <div class="field small">
+                <label for="doStart">Começar em</label>
+                <input id="doStart" type="number" value="3" />
+              </div>
+              <div class="field small">
+                <label for="doUntil">Parar quando &lt;=</label>
+                <input id="doUntil" type="number" value="0" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-dowhile">Rodar do...while</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outDoWhile">Clique em “Rodar do...while”.</code></pre>
+            </div>
+            <p class="hint">
+              Mesmo se “começar em” já for &lt;= ao limite, ele roda 1 vez.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="foreach">
+        <h2>forEach</h2>
+        <p class="hint">
+          <strong>forEach</strong> é um método de array para iterar item por item.
+          Ele é ótimo para efeitos (ex.: somar, imprimir), mas não retorna um novo
+          array (para isso, use <strong>map</strong>, <strong>filter</strong>, etc.).
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplo: somar
+const nums = [1, 2, 3];
+let soma = 0;
+nums.forEach((n) =&gt; {
+  soma += n;
+});
+console.log(soma); // 6
+</code></pre>
+
+          <div class="demo" data-demo="foreach">
+            <div class="row">
+              <div class="field full">
+                <label for="eachNums">Números (separe por vírgula)</label>
+                <input id="eachNums" value="1, 2, 3, 4, 5" />
+              </div>
+              <div class="field wide">
+                <label for="eachMode">Ação</label>
+                <select id="eachMode">
+                  <option value="sum">Somar</option>
+                  <option value="double">Gerar array dobrado (usando push)</option>
+                  <option value="labels">Gerar labels "Item #i"</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-foreach">Executar forEach</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outForEach">Clique em “Executar forEach”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="args">
+        <h2>Function — Argumentos/Parâmetros</h2>
+        <p class="hint">
+          <strong>Parâmetros</strong> são os nomes na definição da função.
+          <strong>Argumentos</strong> são os valores que você passa ao chamar.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Parâmetros: (a, b)
+function somar(a, b) {
+  return a + b;
+}
+
+// Argumentos: (10, 5)
+console.log(somar(10, 5)); // 15
+</code></pre>
+
+          <div class="demo" data-demo="args">
+            <div class="row">
+              <div class="field small">
+                <label for="argA">a</label>
+                <input id="argA" type="number" value="10" />
+              </div>
+              <div class="field small">
+                <label for="argB">b</label>
+                <input id="argB" type="number" value="5" />
+              </div>
+              <div class="field wide">
+                <label for="argFn">Função</label>
+                <select id="argFn">
+                  <option value="sum">somar(a, b)</option>
+                  <option value="pow">potencia(a, b) (a ** b)</option>
+                  <option value="clamp">clamp(valor=a, min=0, max=b)</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-args">Chamar função</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outArgs">Clique em “Chamar função”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="return">
+        <h2>Function — Return</h2>
+        <p class="hint">
+          <strong>return</strong> devolve um valor e encerra a função.
+          Sem return, a função retorna <strong>undefined</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>function comReturn(x) {
+  return x * 2;
+}
+
+function semReturn(x) {
+  x * 2; // isso NÃO é retornado
+}
+
+console.log(comReturn(2)); // 4
+console.log(semReturn(2)); // undefined
+</code></pre>
+
+          <div class="demo" data-demo="return">
+            <div class="row">
+              <div class="field small">
+                <label for="retX">x</label>
+                <input id="retX" type="number" value="2" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-return">Testar return</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outReturn">Clique em “Testar return”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="desafio">
+        <h2>Desafio resolvido</h2>
+        <p class="hint">
+          Problema: contar quantas <strong>vogais</strong> existem em uma frase.
+          Solução usando função + <strong>for...of</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Solução
+function contarVogais(frase) {
+  const vogais = "aeiou";
+  let total = 0;
+
+  for (const ch of frase.toLowerCase()) {
+    if (vogais.includes(ch)) total++;
+  }
+
+  return total;
+}
+
+console.log(contarVogais("Olá mundo"));
+</code></pre>
+
+          <div class="demo" data-demo="desafio">
+            <div class="row">
+              <div class="field full">
+                <label for="vowelText">Frase</label>
+                <input id="vowelText" value="Olá mundo" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="secondary" data-action="run-desafio">Contar vogais</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outDesafio">Clique em “Contar vogais”.</code></pre>
+            </div>
+            <p class="hint">
+              Acentos (á, é, etc.) não contam aqui — é proposital pra manter o
+              exercício simples.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="arrow">
+        <h2>Arrow Functions</h2>
+        <p class="hint">
+          Arrow function é uma forma mais curta de escrever função.
+          Ex.: <span class="kbd">(a, b) =&gt; a + b</span>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Função normal
+function somar(a, b) {
+  return a + b;
+}
+
+// Arrow function equivalente
+const somar2 = (a, b) =&gt; a + b;
+
+console.log(somar2(10, 5)); // 15
+</code></pre>
+
+          <div class="demo" data-demo="arrow">
+            <div class="row">
+              <div class="field small">
+                <label for="arrowA">a</label>
+                <input id="arrowA" type="number" value="10" />
+              </div>
+              <div class="field small">
+                <label for="arrowB">b</label>
+                <input id="arrowB" type="number" value="5" />
+              </div>
+              <div class="field wide">
+                <label for="arrowMode">Arrow</label>
+                <select id="arrowMode">
+                  <option value="sum">(a, b) =&gt; a + b</option>
+                  <option value="mul">(a, b) =&gt; a * b</option>
+                  <option value="isAdult">(a) =&gt; a &gt;= b (idade mínima = b)</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-arrow">Executar arrow</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outArrow">Clique em “Executar arrow”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="anon">
+        <h2>Função anônima</h2>
+        <p class="hint">
+          Uma função anônima é uma função sem nome, comum em callbacks.
+          Ex.: passar uma função direto para <strong>setTimeout</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Callback com função anônima
+setTimeout(function () {
+  console.log("Rodou!");
+}, 500);
+
+// Também é comum em arrays
+[1, 2, 3].forEach(function (n) {
+  console.log(n);
+});
+</code></pre>
+
+          <div class="demo" data-demo="anon">
+            <div class="row">
+              <div class="field small">
+                <label for="anonMs">Tempo (ms)</label>
+                <input id="anonMs" type="number" value="500" min="0" step="50" />
+              </div>
+              <div class="field wide">
+                <label for="anonList">Array (separe por vírgula)</label>
+                <input id="anonList" value="1,2,3" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-anon-timeout">Rodar setTimeout (anônima)</button>
+              <button type="button" class="secondary" data-action="run-anon-foreach">Rodar forEach (anônima)</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outAnon">Clique em uma ação acima.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p style="margin: 0">
+          Se quiser, eu junto este guia com o de operadores em um único HTML.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      "use strict";
+
+      const $ = (selector) => {
+        const element = document.querySelector(selector);
+        if (!element) throw new Error(`Elemento não encontrado: ${selector}`);
+        return element;
+      };
+
+      function toInt(value, fallback = 0) {
+        const n = Number.parseInt(String(value), 10);
+        return Number.isFinite(n) ? n : fallback;
+      }
+
+      function parseCsvNumbers(text) {
+        const parts = String(text)
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+
+        const nums = [];
+        for (const p of parts) {
+          const n = Number(p);
+          if (!Number.isFinite(n)) return { ok: false, error: `Valor inválido: ${JSON.stringify(p)}` };
+          nums.push(n);
+        }
+        return { ok: true, value: nums };
+      }
+
+      function parseCsvStrings(text) {
+        const parts = String(text)
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        return parts;
+      }
+
+      // for
+      function runFor() {
+        const start = toInt($("#forStart").value, 1);
+        const end = toInt($("#forEnd").value, 10);
+        let step = toInt($("#forStep").value, 1);
+
+        if (step === 0) step = 1;
+
+        const values = [];
+        let sum = 0;
+
+        // evita loop infinito em casos ruins
+        const maxIterations = 1000;
+        let iterations = 0;
+
+        if (start <= end && step < 0) step = Math.abs(step);
+        if (start >= end && step > 0) step = -Math.abs(step);
+
+        for (let i = start; start <= end ? i <= end : i >= end; i += step) {
+          values.push(i);
+          sum += i;
+          iterations += 1;
+          if (iterations >= maxIterations) break;
+        }
+
+        const note = iterations >= maxIterations ? "\n(Parou cedo pra evitar loop infinito.)" : "";
+        $("#outFor").textContent = `Sequência: [${values.join(", ")}]\nSoma: ${sum}${note}`;
+      }
+
+      // desafio for
+      function runChallengeFor() {
+        const n = Math.max(1, toInt($("#challengeN").value, 20));
+        let sumEven = 0;
+        const evens = [];
+
+        for (let i = 1; i <= n; i++) {
+          if (i % 2 === 0) {
+            evens.push(i);
+            sumEven += i;
+          }
+        }
+
+        $("#outChallengeFor").textContent = `Pares de 1 até ${n}: [${evens.join(", ")}]\nSoma dos pares: ${sumEven}`;
+      }
+
+      // for...of
+      function runForOf() {
+        const list = parseCsvStrings($("#forOfList").value);
+        const visited = [];
+        for (const value of list) {
+          visited.push(value);
+        }
+        $("#outForOf").textContent = visited.length
+          ? `Valores (for...of):\n- ${visited.join("\n- ")}`
+          : "Lista vazia.";
+      }
+
+      // for...in
+      function runForIn() {
+        const target = $("#forInTarget").value;
+        const pessoa = { nome: "Ana", idade: 20, cidade: "SP" };
+        const nums = [10, 20, 30];
+
+        const lines = [];
+        if (target === "object") {
+          for (const key in pessoa) {
+            lines.push(`${key} => ${JSON.stringify(pessoa[key])}`);
+          }
+          $("#outForIn").textContent = `Chaves (for...in) no objeto pessoa:\n${lines.join("\n")}`;
+          return;
+        }
+
+        for (const i in nums) {
+          lines.push(`${i} => ${nums[i]}`);
+        }
+        $("#outForIn").textContent = `Índices (for...in) no array nums:\n${lines.join("\n")}`;
+      }
+
+      // do...while
+      function runDoWhile() {
+        const start = toInt($("#doStart").value, 3);
+        const until = toInt($("#doUntil").value, 0);
+
+        const values = [];
+        let i = start;
+
+        // evita loop infinito
+        const maxIterations = 1000;
+        let iterations = 0;
+
+        do {
+          values.push(i);
+          i -= 1;
+          iterations += 1;
+          if (iterations >= maxIterations) break;
+        } while (i > until);
+
+        const note = iterations >= maxIterations ? "\n(Parou cedo pra evitar loop infinito.)" : "";
+        $("#outDoWhile").textContent = `Execuções: [${values.join(", ")}]${note}`;
+      }
+
+      // forEach
+      function runForEach() {
+        const parsed = parseCsvNumbers($("#eachNums").value);
+        if (!parsed.ok) {
+          $("#outForEach").textContent = `Erro: ${parsed.error}`;
+          return;
+        }
+
+        const nums = parsed.value;
+        const mode = $("#eachMode").value;
+
+        if (mode === "sum") {
+          let sum = 0;
+          nums.forEach((n) => {
+            sum += n;
+          });
+          $("#outForEach").textContent = `Array: [${nums.join(", ")}]\nSoma (forEach): ${sum}`;
+          return;
+        }
+
+        if (mode === "double") {
+          const doubled = [];
+          nums.forEach((n) => {
+            doubled.push(n * 2);
+          });
+          $("#outForEach").textContent = `Original: [${nums.join(", ")}]\nDobrados (push no forEach): [${doubled.join(", ")}]`;
+          return;
+        }
+
+        const labels = [];
+        nums.forEach((_, index) => {
+          labels.push(`Item #${index}`);
+        });
+        $("#outForEach").textContent = labels.length ? labels.join("\n") : "Array vazio.";
+      }
+
+      // Argumentos / parâmetros
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      function runArgs() {
+        const a = Number($("#argA").value);
+        const b = Number($("#argB").value);
+        const fn = $("#argFn").value;
+
+        function somar(x, y) {
+          return x + y;
+        }
+
+        function potencia(x, y) {
+          return x ** y;
+        }
+
+        let result;
+        if (fn === "sum") result = somar(a, b);
+        else if (fn === "pow") result = potencia(a, b);
+        else result = clamp(a, 0, b);
+
+        $("#outArgs").textContent = `a = ${a}, b = ${b}\nResultado: ${result}`;
+      }
+
+      // return
+      function runReturn() {
+        const x = Number($("#retX").value);
+
+        function comReturn(v) {
+          return v * 2;
+        }
+
+        function semReturn(v) {
+          v * 2;
+        }
+
+        const a = comReturn(x);
+        const b = semReturn(x);
+        $("#outReturn").textContent = `comReturn(${x}) => ${a}\nsemReturn(${x}) => ${String(b)}`;
+      }
+
+      // desafio resolvido
+      function contarVogais(frase) {
+        const vogais = "aeiou";
+        let total = 0;
+
+        for (const ch of String(frase).toLowerCase()) {
+          if (vogais.includes(ch)) total++;
+        }
+
+        return total;
+      }
+
+      function runDesafio() {
+        const text = $("#vowelText").value;
+        const total = contarVogais(text);
+        $("#outDesafio").textContent = `Frase: ${JSON.stringify(text)}\nVogais (a,e,i,o,u): ${total}`;
+      }
+
+      // arrow
+      function runArrow() {
+        const a = Number($("#arrowA").value);
+        const b = Number($("#arrowB").value);
+        const mode = $("#arrowMode").value;
+
+        const sum = (x, y) => x + y;
+        const mul = (x, y) => x * y;
+        const isAdult = (age, minAge) => age >= minAge;
+
+        let result;
+        if (mode === "sum") result = sum(a, b);
+        else if (mode === "mul") result = mul(a, b);
+        else result = isAdult(a, b);
+
+        $("#outArrow").textContent = `a = ${a}, b = ${b}\nResultado: ${String(result)}`;
+      }
+
+      // função anônima
+      function runAnonTimeout() {
+        const ms = Math.max(0, toInt($("#anonMs").value, 500));
+        $("#outAnon").textContent = `Agendado: vou escrever aqui em ${ms}ms...`;
+
+        setTimeout(function () {
+          $("#outAnon").textContent = `setTimeout: rodei depois de ${ms}ms (função anônima).`;
+        }, ms);
+      }
+
+      function runAnonForEach() {
+        const parsed = parseCsvNumbers($("#anonList").value);
+        if (!parsed.ok) {
+          $("#outAnon").textContent = `Erro: ${parsed.error}`;
+          return;
+        }
+
+        const nums = parsed.value;
+        const lines = [];
+
+        nums.forEach(function (n, i) {
+          lines.push(`Index ${i}: valor ${n}`);
+        });
+
+        $("#outAnon").textContent = lines.length ? lines.join("\n") : "Array vazio.";
+      }
+
+      // Delegação de eventos
+      document.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+
+        const action = button.getAttribute("data-action");
+        switch (action) {
+          case "run-for":
+            runFor();
+            break;
+          case "run-challenge-for":
+            runChallengeFor();
+            break;
+          case "run-forof":
+            runForOf();
+            break;
+          case "run-forin":
+            runForIn();
+            break;
+          case "run-dowhile":
+            runDoWhile();
+            break;
+          case "run-foreach":
+            runForEach();
+            break;
+          case "run-args":
+            runArgs();
+            break;
+          case "run-return":
+            runReturn();
+            break;
+          case "run-desafio":
+            runDesafio();
+            break;
+          case "run-arrow":
+            runArrow();
+            break;
+          case "run-anon-timeout":
+            runAnonTimeout();
+            break;
+          case "run-anon-foreach":
+            runAnonForEach();
+            break;
+          default:
+            break;
+        }
+      });
+    </script>
+  </body>
+</html>

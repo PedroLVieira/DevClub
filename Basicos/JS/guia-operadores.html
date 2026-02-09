@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guia Prático — Operadores e Controle (JS)</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0f14;
+        --panel: #101826;
+        --panel-2: #0e1522;
+        --text: #e7edf5;
+        --muted: #a9b7c9;
+        --border: rgba(231, 237, 245, 0.12);
+        --accent: #7c5cff;
+        --accent-2: #2dd4bf;
+        --warn: #fbbf24;
+        --danger: #fb7185;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        background: radial-gradient(1200px 600px at 20% -10%, rgba(124, 92, 255, 0.20), transparent 60%),
+          radial-gradient(1200px 600px at 85% 0%, rgba(45, 212, 191, 0.14), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        line-height: 1.45;
+      }
+
+      header {
+        padding: 28px 16px 16px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(16, 24, 38, 0.85), rgba(11, 15, 20, 0.2));
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(10px);
+        z-index: 5;
+      }
+
+      .container {
+        max-width: 1060px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+
+      .sub {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      nav {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--text);
+        border: 1px solid var(--border);
+        background: rgba(16, 24, 38, 0.55);
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        transition: transform 120ms ease, border-color 120ms ease;
+        white-space: nowrap;
+      }
+
+      nav a:hover {
+        transform: translateY(-1px);
+        border-color: rgba(124, 92, 255, 0.55);
+      }
+
+      main {
+        padding: 18px 16px 48px;
+      }
+
+      section {
+        margin: 18px 0;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(16, 24, 38, 0.75), rgba(14, 21, 34, 0.55));
+      }
+
+      section h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+
+      .hint {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 14px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      pre {
+        margin: 0;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(11, 15, 20, 0.7);
+        overflow: auto;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 12.5px;
+        color: #eaf2ff;
+      }
+
+      .demo {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: rgba(11, 15, 20, 0.35);
+        padding: 12px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .row {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(12, 1fr);
+        align-items: end;
+      }
+
+      .field {
+        grid-column: span 4;
+        display: grid;
+        gap: 6px;
+      }
+
+      .field.small {
+        grid-column: span 3;
+      }
+
+      .field.wide {
+        grid-column: span 6;
+      }
+
+      @media (max-width: 900px) {
+        .field,
+        .field.small,
+        .field.wide {
+          grid-column: 1 / -1;
+        }
+      }
+
+      label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 9px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(231, 237, 245, 0.14);
+        background: rgba(16, 24, 38, 0.6);
+        color: var(--text);
+        outline: none;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: rgba(124, 92, 255, 0.65);
+        box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.18);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      button {
+        border: 1px solid var(--border);
+        background: rgba(124, 92, 255, 0.18);
+        color: var(--text);
+        padding: 9px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 12px;
+        transition: transform 120ms ease, border-color 120ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(124, 92, 255, 0.55);
+      }
+
+      button.secondary {
+        background: rgba(45, 212, 191, 0.12);
+      }
+
+      button.danger {
+        background: rgba(251, 113, 133, 0.14);
+      }
+
+      .out {
+        border: 1px dashed rgba(231, 237, 245, 0.18);
+        border-radius: 12px;
+        padding: 10px;
+        background: rgba(16, 24, 38, 0.35);
+      }
+
+      .out-title {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+
+      .out pre {
+        border: 0;
+        background: transparent;
+        padding: 0;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(16, 24, 38, 0.45);
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .pill strong {
+        color: var(--text);
+      }
+
+      footer {
+        padding: 18px 16px 28px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 6px;
+        border: 1px solid rgba(231, 237, 245, 0.18);
+        background: rgba(11, 15, 20, 0.55);
+        color: var(--text);
+      }
+
+      .warn {
+        color: var(--warn);
+      }
+
+      .ok {
+        color: var(--accent-2);
+      }
+
+      .danger-text {
+        color: var(--danger);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Guia Prático — Operadores e Controle (JavaScript)</h1>
+        <p class="sub">
+          Explicações rápidas + amostras práticas para testar no navegador.
+          Dica: abra o DevTools com <span class="kbd">F12</span>.
+        </p>
+        <nav aria-label="Navegação por tópicos">
+          <a href="#aritmeticos">Operadores Aritméticos</a>
+          <a href="#atribuicao">Operadores de Atribuição</a>
+          <a href="#comparacao">Operadores de comparação</a>
+          <a href="#comparacao2">Comparação pt.2</a>
+          <a href="#logicos">Operadores lógicos</a>
+          <a href="#typeof-delete">typeof e delete</a>
+          <a href="#else-if">else if</a>
+          <a href="#ternario">Operador ternário</a>
+          <a href="#switch">switch case</a>
+          <a href="#timers">setTimeout &amp; setInterval</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="aritmeticos">
+        <h2>Operadores Aritméticos</h2>
+        <p class="hint">
+          Usados para fazer contas: <strong>+</strong>, <strong>-</strong>,
+          <strong>*</strong>, <strong>/</strong>, <strong>%</strong> (resto),
+          <strong>**</strong> (potência).
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplos
+const a = 10;
+const b = 3;
+
+console.log(a + b);  // 13
+console.log(a - b);  // 7
+console.log(a * b);  // 30
+console.log(a / b);  // 3.333...
+console.log(a % b);  // 1 (resto)
+console.log(a ** b); // 1000
+</code></pre>
+
+          <div class="demo" data-demo="aritmeticos">
+            <div class="row">
+              <div class="field small">
+                <label for="arithA">A</label>
+                <input id="arithA" type="number" value="10" />
+              </div>
+              <div class="field small">
+                <label for="arithOp">Operação</label>
+                <select id="arithOp">
+                  <option value="+">+</option>
+                  <option value="-">-</option>
+                  <option value="*">*</option>
+                  <option value="/">/</option>
+                  <option value="%">%</option>
+                  <option value="**">**</option>
+                </select>
+              </div>
+              <div class="field small">
+                <label for="arithB">B</label>
+                <input id="arithB" type="number" value="3" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-arith">Calcular</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outArith">Clique em “Calcular”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="atribuicao">
+        <h2>Operadores de Atribuição</h2>
+        <p class="hint">
+          Atualizam o valor de uma variável: <strong>=</strong>,
+          <strong>+=</strong>, <strong>-=</strong>, <strong>*=</strong>,
+          <strong>/=</strong>, <strong>%=</strong>, <strong>**=</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplo
+let x = 10;
+
+x += 5; // 15
+x -= 2; // 13
+x *= 3; // 39
+x /= 3; // 13
+</code></pre>
+
+          <div class="demo" data-demo="atribuicao">
+            <div class="pill"><strong>x</strong> começa em <span id="assignX">10</span></div>
+            <div class="row">
+              <div class="field small">
+                <label for="assignOp">Operador</label>
+                <select id="assignOp">
+                  <option value="=">=</option>
+                  <option value="+=">+=</option>
+                  <option value="-=">-=</option>
+                  <option value="*=">*=</option>
+                  <option value="/=">/=</option>
+                  <option value="%=">%=</option>
+                  <option value="**=">**=</option>
+                </select>
+              </div>
+              <div class="field small">
+                <label for="assignValue">Valor</label>
+                <input id="assignValue" type="number" value="5" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="secondary" data-action="apply-assign">Aplicar</button>
+              <button type="button" class="danger" data-action="reset-assign">Reset</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outAssign">x = 10</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="comparacao">
+        <h2>Operadores de comparação</h2>
+        <p class="hint">
+          Retornam <strong>true</strong> ou <strong>false</strong>:
+          <strong>&gt;</strong>, <strong>&gt;=</strong>, <strong>&lt;</strong>,
+          <strong>&lt;=</strong>, <strong>==</strong>, <strong>!=</strong>,
+          <strong>===</strong>, <strong>!==</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplos
+console.log(10 &gt; 3);   // true
+console.log(10 &lt;= 3);  // false
+
+console.log(5 == "5");   // true (converte tipos)
+console.log(5 === "5");  // false (não converte)
+</code></pre>
+
+          <div class="demo" data-demo="comparacao">
+            <div class="row">
+              <div class="field">
+                <label for="cmpLeft">Valor da esquerda</label>
+                <input id="cmpLeft" value="5" />
+              </div>
+              <div class="field small">
+                <label for="cmpOp">Operador</label>
+                <select id="cmpOp">
+                  <option value="==">==</option>
+                  <option value="!=">!=</option>
+                  <option value="===">===</option>
+                  <option value="!==">!==</option>
+                  <option value=">">&gt;</option>
+                  <option value=">=">&gt;=</option>
+                  <option value="<">&lt;</option>
+                  <option value="<=">&lt;=</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="cmpRight">Valor da direita</label>
+                <input id="cmpRight" value="5" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-compare">Comparar</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outCompare">Clique em “Comparar”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="comparacao2">
+        <h2>Operadores de comparação pt.2 (coerção, NaN, strings)</h2>
+        <p class="hint">
+          Aqui a ideia é ver pegadinhas comuns: coerção de tipo com
+          <strong>==</strong>, diferença para <strong>===</strong>, comparação
+          com strings, e o comportamento do <strong>NaN</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Coerção (==) vs estrito (===)
+console.log(null == undefined);  // true
+console.log(null === undefined); // false
+
+// Strings com &gt; / &lt; seguem ordem lexicográfica
+console.log("b" &gt; "a"); // true
+
+// NaN nunca é igual a nada (nem a ele mesmo)
+console.log(NaN == NaN);  // false
+console.log(Number.isNaN(NaN)); // true
+</code></pre>
+
+          <div class="demo" data-demo="comparacao2">
+            <div class="row">
+              <div class="field wide">
+                <label for="cmp2Preset">Escolha um caso</label>
+                <select id="cmp2Preset">
+                  <option value="looseStrict">5 == "5" vs 5 === "5"</option>
+                  <option value="nullUndef">null == undefined vs ===</option>
+                  <option value="stringOrder">"10" &gt; "2" (string)</option>
+                  <option value="nan">NaN == NaN e Number.isNaN</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="secondary" data-action="run-compare2">Executar caso</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outCompare2">Escolha um caso e clique em “Executar caso”.</code></pre>
+            </div>
+            <p class="hint">
+              Observação: <span class="warn">"10" &gt; "2"</span> dá
+              <strong>true</strong> porque compara como texto ("1" vem antes de
+              "2"), não como número.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="logicos">
+        <h2>Operadores lógicos</h2>
+        <p class="hint">
+          <strong>&amp;&amp;</strong> (E), <strong>||</strong> (OU),
+          <strong>!</strong> (NÃO). Em JS, <strong>&amp;&amp;</strong> e
+          <strong>||</strong> retornam um <em>valor</em> (não só boolean), usando
+          “curto-circuito”.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplos
+console.log(true &amp;&amp; false); // false
+console.log(true || false); // true
+console.log(!true);         // false
+
+// Curto-circuito (retorna valores)
+console.log("" || "fallback");     // "fallback"
+console.log("ok" &amp;&amp; "próximo");   // "próximo"
+</code></pre>
+
+          <div class="demo" data-demo="logicos">
+            <div class="row">
+              <div class="field">
+                <label for="logicA">A (true/false ou valor)</label>
+                <input id="logicA" value="" placeholder="Ex.: true, false, 0, '', 'ok'" />
+              </div>
+              <div class="field small">
+                <label for="logicOp">Operador</label>
+                <select id="logicOp">
+                  <option value="&&">&&</option>
+                  <option value="||">||</option>
+                  <option value="!">!</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="logicB">B (usado em && e ||)</label>
+                <input id="logicB" value="fallback" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-logic">Avaliar</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outLogic">Clique em “Avaliar”.</code></pre>
+            </div>
+            <p class="hint">
+              Dica: experimente A vazio (<span class="kbd">''</span>) com
+              <span class="kbd">||</span> para ver “fallback”.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="typeof-delete">
+        <h2>Operadores <code>typeof</code> e <code>delete</code></h2>
+        <p class="hint">
+          <strong>typeof</strong> retorna o tipo (string). <strong>delete</strong>
+          remove uma <em>propriedade</em> de um objeto (não é pra “apagar variável”
+          comum).
+        </p>
+
+        <div class="grid">
+          <pre><code>// typeof
+console.log(typeof 123);        // "number"
+console.log(typeof "abc");      // "string"
+console.log(typeof true);       // "boolean"
+console.log(typeof undefined);  // "undefined"
+console.log(typeof null);       // "object"  (pegadinha histórica)
+console.log(typeof {});         // "object"
+console.log(typeof (() =&gt; {})); // "function"
+
+// delete (em propriedade)
+const pessoa = { nome: "Ana", idade: 20 };
+delete pessoa.idade;
+console.log(pessoa); // { nome: "Ana" }
+</code></pre>
+
+          <div class="demo" data-demo="typeof-delete">
+            <div class="row">
+              <div class="field wide">
+                <label for="typeValue">Valor para testar (JS literal simples)</label>
+                <input id="typeValue" value="null" placeholder="Ex.: 123, 'abc', true, undefined, null, {}, []" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-typeof">Ver typeof</button>
+              <button type="button" class="secondary" data-action="run-delete">Testar delete em objeto</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outTypeDelete">Escolha uma ação acima.</code></pre>
+            </div>
+            <p class="hint">
+              Nota: <span class="warn">typeof null</span> retorna
+              <strong>"object"</strong> por um detalhe histórico do JS.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="else-if">
+        <h2>Else if</h2>
+        <p class="hint">
+          Encadeia condições: testa uma, se não passar, testa a próxima, e por
+          fim cai no <strong>else</strong>.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplo (faixa etária)
+function classificarIdade(idade) {
+  if (idade &lt; 12) return "criança";
+  else if (idade &lt; 18) return "adolescente";
+  else if (idade &lt; 60) return "adulto";
+  else return "idoso";
+}
+</code></pre>
+
+          <div class="demo" data-demo="else-if">
+            <div class="row">
+              <div class="field small">
+                <label for="ageInput">Idade</label>
+                <input id="ageInput" type="number" value="20" min="0" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-elseif">Classificar</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outElseIf">Clique em “Classificar”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ternario">
+        <h2>Operador ternário</h2>
+        <p class="hint">
+          Forma curta de <strong>if/else</strong>:<br />
+          <span class="kbd">condição ? valorSeVerdadeiro : valorSeFalso</span>
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplo
+const idade = 17;
+const podeEntrar = idade &gt;= 18 ? "Pode" : "Não pode";
+console.log(podeEntrar);
+</code></pre>
+
+          <div class="demo" data-demo="ternario">
+            <div class="row">
+              <div class="field small">
+                <label for="ternAge">Idade</label>
+                <input id="ternAge" type="number" value="17" min="0" />
+              </div>
+              <div class="field small">
+                <label for="ternMin">Idade mínima</label>
+                <input id="ternMin" type="number" value="18" min="0" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-ternary">Avaliar ternário</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outTernary">Clique em “Avaliar ternário”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="switch">
+        <h2>Switch case</h2>
+        <p class="hint">
+          Útil quando você tem muitas opções para um mesmo valor.
+          Lembre do <strong>break</strong> para não “cair” no próximo case.
+        </p>
+
+        <div class="grid">
+          <pre><code>// Exemplo
+function precoDoPlano(plano) {
+  switch (plano) {
+    case "basic":
+      return 19.9;
+    case "pro":
+      return 39.9;
+    case "enterprise":
+      return 99.9;
+    default:
+      return null;
+  }
+}
+</code></pre>
+
+          <div class="demo" data-demo="switch">
+            <div class="row">
+              <div class="field wide">
+                <label for="planSelect">Plano</label>
+                <select id="planSelect">
+                  <option value="basic">basic</option>
+                  <option value="pro">pro</option>
+                  <option value="enterprise">enterprise</option>
+                  <option value="outro">outro (default)</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-switch">Calcular preço</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outSwitch">Clique em “Calcular preço”.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="timers">
+        <h2>setTimeout &amp; setInterval</h2>
+        <p class="hint">
+          <strong>setTimeout</strong> executa 1 vez após um tempo.
+          <strong>setInterval</strong> executa repetidamente.
+          Use <strong>clearTimeout</strong> e <strong>clearInterval</strong> para cancelar.
+        </p>
+
+        <div class="grid">
+          <pre><code>// setTimeout (1 vez)
+const idTimeout = setTimeout(() =&gt; {
+  console.log("Rodou depois de 1s");
+}, 1000);
+
+// cancelar
+clearTimeout(idTimeout);
+
+// setInterval (repetindo)
+const idInterval = setInterval(() =&gt; {
+  console.log("Tick");
+}, 1000);
+
+// parar
+clearInterval(idInterval);
+</code></pre>
+
+          <div class="demo" data-demo="timers">
+            <div class="row">
+              <div class="field small">
+                <label for="timerMs">Tempo (ms)</label>
+                <input id="timerMs" type="number" value="1000" min="50" step="50" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" data-action="run-timeout">Rodar setTimeout</button>
+              <button type="button" class="secondary" data-action="start-interval">Iniciar setInterval</button>
+              <button type="button" class="danger" data-action="stop-interval">Parar interval</button>
+            </div>
+            <div class="out" aria-live="polite">
+              <p class="out-title">Saída</p>
+              <pre><code id="outTimers">Nenhum timer rodando.</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p style="margin: 0">
+          Se quiser, eu também posso criar uma versão em arquivos separados
+          (HTML + CSS + JS) para ficar mais parecido com projetos reais.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      "use strict";
+
+      const $ = (selector) => {
+        const element = document.querySelector(selector);
+        if (!element) throw new Error(`Elemento não encontrado: ${selector}`);
+        return element;
+      };
+
+      function formatValue(value) {
+        if (typeof value === "string") return JSON.stringify(value);
+        if (Number.isNaN(value)) return "NaN";
+        if (value === undefined) return "undefined";
+        return String(value);
+      }
+
+      function safeEvalLiteral(input) {
+        // Aceita literais simples para fins didáticos.
+        // Exemplos: 123, 'abc', true, false, null, undefined, {}, [], "texto"
+        // OBS: Isso usa Function para simplificar a demo local.
+        try {
+          // eslint-disable-next-line no-new-func
+          return { ok: true, value: Function(`"use strict"; return (${input});`)() };
+        } catch (error) {
+          return { ok: false, error };
+        }
+      }
+
+      // Operadores Aritméticos
+      function runArithmetic() {
+        const a = Number($("#arithA").value);
+        const b = Number($("#arithB").value);
+        const op = $("#arithOp").value;
+
+        let result;
+        switch (op) {
+          case "+":
+            result = a + b;
+            break;
+          case "-":
+            result = a - b;
+            break;
+          case "*":
+            result = a * b;
+            break;
+          case "/":
+            result = b === 0 ? "Erro: divisão por 0" : a / b;
+            break;
+          case "%":
+            result = b === 0 ? "Erro: módulo por 0" : a % b;
+            break;
+          case "**":
+            result = a ** b;
+            break;
+          default:
+            result = "Operação inválida";
+        }
+
+        $("#outArith").textContent = `${a} ${op} ${b} = ${result}`;
+      }
+
+      // Operadores de Atribuição
+      let assignX = 10;
+      function renderAssign() {
+        $("#assignX").textContent = String(assignX);
+        $("#outAssign").textContent = `x = ${assignX}`;
+      }
+
+      function applyAssignment() {
+        const op = $("#assignOp").value;
+        const value = Number($("#assignValue").value);
+
+        switch (op) {
+          case "=":
+            assignX = value;
+            break;
+          case "+=":
+            assignX += value;
+            break;
+          case "-=":
+            assignX -= value;
+            break;
+          case "*=":
+            assignX *= value;
+            break;
+          case "/=":
+            assignX = value === 0 ? assignX : assignX / value;
+            break;
+          case "%=":
+            assignX = value === 0 ? assignX : assignX % value;
+            break;
+          case "**=":
+            assignX **= value;
+            break;
+          default:
+            break;
+        }
+
+        renderAssign();
+      }
+
+      function resetAssignment() {
+        assignX = 10;
+        renderAssign();
+      }
+
+      // Comparação
+      function runCompare() {
+        const leftRaw = $("#cmpLeft").value;
+        const rightRaw = $("#cmpRight").value;
+        const op = $("#cmpOp").value;
+
+        // Pra mostrar coerção, tentamos preservar strings.
+        // Porém para operadores relacionais, faz sentido converter para número quando possível.
+        const leftNum = Number(leftRaw);
+        const rightNum = Number(rightRaw);
+        const useNumber = [">", ">=", "<", "<="];
+
+        const left = useNumber.includes(op) && !Number.isNaN(leftNum) ? leftNum : leftRaw;
+        const right = useNumber.includes(op) && !Number.isNaN(rightNum) ? rightNum : rightRaw;
+
+        let result;
+        switch (op) {
+          case "==":
+            result = left == right;
+            break;
+          case "!=":
+            result = left != right;
+            break;
+          case "===":
+            result = left === right;
+            break;
+          case "!==":
+            result = left !== right;
+            break;
+          case ">":
+            result = left > right;
+            break;
+          case ">=":
+            result = left >= right;
+            break;
+          case "<":
+            result = left < right;
+            break;
+          case "<=":
+            result = left <= right;
+            break;
+          default:
+            result = "Operador inválido";
+        }
+
+        const leftShow = formatValue(left);
+        const rightShow = formatValue(right);
+        $("#outCompare").textContent = `${leftShow} ${op} ${rightShow} => ${result}`;
+      }
+
+      // Comparação pt2
+      function runCompare2() {
+        const preset = $("#cmp2Preset").value;
+
+        let lines = [];
+        if (preset === "looseStrict") {
+          lines = [
+            `5 == "5" => ${5 == "5"}`,
+            `5 === "5" => ${5 === "5"}`,
+            "",
+            "Dica: prefira === e !== no dia a dia.",
+          ];
+        } else if (preset === "nullUndef") {
+          lines = [
+            `null == undefined => ${null == undefined}`,
+            `null === undefined => ${null === undefined}`,
+          ];
+        } else if (preset === "stringOrder") {
+          lines = [
+            `"10" > "2" => ${"10" > "2"}`,
+            "",
+            "Isso é comparação de texto (lexicográfica).",
+            "Compare como números: Number(" + JSON.stringify("10") + ") > Number(" + JSON.stringify("2") + ")",
+            `Number("10") > Number("2") => ${Number("10") > Number("2")}`,
+          ];
+        } else if (preset === "nan") {
+          lines = [
+            `NaN == NaN => ${Number.NaN == Number.NaN}`,
+            `NaN === NaN => ${Number.NaN === Number.NaN}`,
+            `Number.isNaN(NaN) => ${Number.isNaN(Number.NaN)}`,
+          ];
+        }
+
+        $("#outCompare2").textContent = lines.join("\n");
+      }
+
+      // Lógicos
+      function runLogic() {
+        const aText = $("#logicA").value;
+        const bText = $("#logicB").value;
+        const op = $("#logicOp").value;
+
+        const aParsed = aText.trim() === "" ? "" : safeEvalLiteral(aText);
+        const bParsed = safeEvalLiteral(bText);
+
+        if (aParsed !== "" && !aParsed.ok) {
+          $("#outLogic").textContent = `Erro no valor A: ${aParsed.error.message}`;
+          return;
+        }
+        if (!bParsed.ok) {
+          $("#outLogic").textContent = `Erro no valor B: ${bParsed.error.message}`;
+          return;
+        }
+
+        const a = aParsed === "" ? "" : aParsed.value;
+        const b = bParsed.value;
+
+        let result;
+        if (op === "!") {
+          result = !a;
+          $("#outLogic").textContent = `!${formatValue(a)} => ${formatValue(result)}`;
+          return;
+        }
+
+        if (op === "&&") {
+          result = a && b;
+        } else if (op === "||") {
+          result = a || b;
+        } else {
+          result = "Operador inválido";
+        }
+
+        $("#outLogic").textContent = `${formatValue(a)} ${op} ${formatValue(b)} => ${formatValue(result)}`;
+      }
+
+      // typeof e delete
+      function runTypeof() {
+        const input = $("#typeValue").value;
+        const parsed = safeEvalLiteral(input);
+        if (!parsed.ok) {
+          $("#outTypeDelete").textContent = `Erro ao ler o valor: ${parsed.error.message}`;
+          return;
+        }
+
+        const value = parsed.value;
+        const type = typeof value;
+        const show = formatValue(value);
+        $("#outTypeDelete").textContent = `Valor: ${show}\ntypeof => ${JSON.stringify(type)}`;
+      }
+
+      function runDelete() {
+        const pessoa = { nome: "Ana", idade: 20, cidade: "SP" };
+        const before = JSON.stringify(pessoa);
+        const ok = delete pessoa.idade;
+        const after = JSON.stringify(pessoa);
+        $("#outTypeDelete").textContent = [
+          `Antes: ${before}`,
+          `delete pessoa.idade => ${ok}`,
+          `Depois: ${after}`,
+        ].join("\n");
+      }
+
+      // else if
+      function runElseIf() {
+        const idade = Number($("#ageInput").value);
+
+        let faixa;
+        if (idade < 12) faixa = "criança";
+        else if (idade < 18) faixa = "adolescente";
+        else if (idade < 60) faixa = "adulto";
+        else faixa = "idoso";
+
+        $("#outElseIf").textContent = `idade = ${idade} => ${faixa}`;
+      }
+
+      // ternário
+      function runTernary() {
+        const idade = Number($("#ternAge").value);
+        const min = Number($("#ternMin").value);
+        const msg = idade >= min ? "Pode" : "Não pode";
+        $("#outTernary").textContent = `idade = ${idade}, mínima = ${min} => ${msg}`;
+      }
+
+      // switch
+      function runSwitch() {
+        const plan = $("#planSelect").value;
+
+        let price;
+        switch (plan) {
+          case "basic":
+            price = 19.9;
+            break;
+          case "pro":
+            price = 39.9;
+            break;
+          case "enterprise":
+            price = 99.9;
+            break;
+          default:
+            price = null;
+        }
+
+        $("#outSwitch").textContent = price === null ? `Plano ${plan}: sem preço (default)` : `Plano ${plan}: R$ ${price.toFixed(2)}`;
+      }
+
+      // timers
+      let intervalId = null;
+      let tick = 0;
+
+      function runTimeout() {
+        const ms = Math.max(0, Number($("#timerMs").value));
+        $("#outTimers").textContent = `Agendado: vou rodar em ${ms}ms...`;
+
+        setTimeout(() => {
+          $("#outTimers").textContent = `setTimeout: rodei depois de ${ms}ms.`;
+        }, ms);
+      }
+
+      function startInterval() {
+        const ms = Math.max(50, Number($("#timerMs").value));
+        if (intervalId !== null) {
+          $("#outTimers").textContent = `Interval já está rodando (a cada ${ms}ms). Pare antes de iniciar outro.`;
+          return;
+        }
+
+        tick = 0;
+        $("#outTimers").textContent = `setInterval iniciado (${ms}ms).`;
+        intervalId = setInterval(() => {
+          tick += 1;
+          $("#outTimers").textContent = `Tick #${tick} (a cada ${ms}ms).`;
+        }, ms);
+      }
+
+      function stopInterval() {
+        if (intervalId === null) {
+          $("#outTimers").textContent = "Nenhum interval rodando.";
+          return;
+        }
+
+        clearInterval(intervalId);
+        intervalId = null;
+        $("#outTimers").textContent = `Interval parado no tick #${tick}.`;
+      }
+
+      // Delegação de eventos (1 listener para a página)
+      document.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+
+        const action = button.getAttribute("data-action");
+        switch (action) {
+          case "run-arith":
+            runArithmetic();
+            break;
+          case "apply-assign":
+            applyAssignment();
+            break;
+          case "reset-assign":
+            resetAssignment();
+            break;
+          case "run-compare":
+            runCompare();
+            break;
+          case "run-compare2":
+            runCompare2();
+            break;
+          case "run-logic":
+            runLogic();
+            break;
+          case "run-typeof":
+            runTypeof();
+            break;
+          case "run-delete":
+            runDelete();
+            break;
+          case "run-elseif":
+            runElseIf();
+            break;
+          case "run-ternary":
+            runTernary();
+            break;
+          case "run-switch":
+            runSwitch();
+            break;
+          case "run-timeout":
+            runTimeout();
+            break;
+          case "start-interval":
+            startInterval();
+            break;
+          case "stop-interval":
+            stopInterval();
+            break;
+          default:
+            break;
+        }
+      });
+
+      // init
+      renderAssign();
+    </script>
+  </body>
+</html>
